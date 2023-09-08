@@ -35,7 +35,7 @@ namespace Teamo_API.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<>
+        //[HttpPost]
+        //public async Task<>
     }
 }
