@@ -1,4 +1,4 @@
-﻿namespace Teamo_API.Models
+﻿namespace Teamo_API
 {
     public class Villa
     {

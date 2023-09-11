@@ -10,11 +10,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Cross Origin Policy
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
+
+
 builder.Services.AddDbContext<DataContext>(opt =>
 {
     //opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
     opt.UseSqlite("Data Source=teamo.db", b => b.MigrationsAssembly("Teamo_API"));
 });
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +40,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("MyPolicy");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
