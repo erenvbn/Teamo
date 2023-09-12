@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Teamo_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230912073722_EnlargeAssignmentSeed")]
+    partial class EnlargeAssignmentSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -172,7 +175,7 @@ namespace Teamo_API.Migrations
                         {
                             Id = 2,
                             AssignmentId = 1,
-                            AuthorId = 2,
+                            AuthorId = 1,
                             CreatedAt = new DateTime(2023, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "I agree, we need to work hard on this"
                         },
@@ -180,7 +183,7 @@ namespace Teamo_API.Migrations
                         {
                             Id = 3,
                             AssignmentId = 2,
-                            AuthorId = 3,
+                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "This assignment is very fun"
                         },
@@ -188,41 +191,9 @@ namespace Teamo_API.Migrations
                         {
                             Id = 4,
                             AssignmentId = 2,
-                            AuthorId = 4,
+                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "I agree, we can learn a lot from this"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AssignmentId = 3,
-                            AuthorId = 1,
-                            CreatedAt = new DateTime(2023, 11, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very interesting"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AssignmentId = 3,
-                            AuthorId = 2,
-                            CreatedAt = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can use some cool features of the device"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AssignmentId = 4,
-                            AuthorId = 3,
-                            CreatedAt = new DateTime(2023, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very creative"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AssignmentId = 4,
-                            AuthorId = 4,
-                            CreatedAt = new DateTime(2023, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can make a fun game with Unity"
                         });
                 });
 

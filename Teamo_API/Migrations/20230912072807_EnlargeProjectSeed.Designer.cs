@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Teamo_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230912072807_EnlargeProjectSeed")]
+    partial class EnlargeProjectSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -69,66 +72,6 @@ namespace Teamo_API.Migrations
                             ProjectId = 2,
                             Status = 0,
                             Title = "Web development"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Create a simple app that uses the camera and GPS features of the device",
-                            DueDate = new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 4,
-                            ProjectId = 3,
-                            Status = 0,
-                            Title = "Mobile development"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Make a game that has basic physics and collision detection",
-                            DueDate = new DateTime(2023, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 5,
-                            ProjectId = 4,
-                            Status = 0,
-                            Title = "Game development"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Write SQL queries to create tables and insert data for the database design",
-                            DueDate = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 4,
-                            ProjectId = 1,
-                            Status = 0,
-                            Title = "Database implementation"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Create a responsive and user-friendly UI for the web application using HTML, CSS and Bootstrap",
-                            DueDate = new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 4,
-                            ProjectId = 2,
-                            Status = 0,
-                            Title = "Web design"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Create a native and intuitive UI for the mobile app using Xamarin Forms",
-                            DueDate = new DateTime(2023, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 4,
-                            ProjectId = 3,
-                            Status = 0,
-                            Title = "Mobile design"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Create a storyboard and a prototype for the game using Unity tools",
-                            DueDate = new DateTime(2023, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Priority = 4,
-                            ProjectId = 4,
-                            Status = 0,
-                            Title = "Game design"
                         });
                 });
 
@@ -172,7 +115,7 @@ namespace Teamo_API.Migrations
                         {
                             Id = 2,
                             AssignmentId = 1,
-                            AuthorId = 2,
+                            AuthorId = 1,
                             CreatedAt = new DateTime(2023, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "I agree, we need to work hard on this"
                         },
@@ -180,7 +123,7 @@ namespace Teamo_API.Migrations
                         {
                             Id = 3,
                             AssignmentId = 2,
-                            AuthorId = 3,
+                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "This assignment is very fun"
                         },
@@ -188,41 +131,9 @@ namespace Teamo_API.Migrations
                         {
                             Id = 4,
                             AssignmentId = 2,
-                            AuthorId = 4,
+                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "I agree, we can learn a lot from this"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AssignmentId = 3,
-                            AuthorId = 1,
-                            CreatedAt = new DateTime(2023, 11, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very interesting"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AssignmentId = 3,
-                            AuthorId = 2,
-                            CreatedAt = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can use some cool features of the device"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AssignmentId = 4,
-                            AuthorId = 3,
-                            CreatedAt = new DateTime(2023, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very creative"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AssignmentId = 4,
-                            AuthorId = 4,
-                            CreatedAt = new DateTime(2023, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can make a fun game with Unity"
                         });
                 });
 
