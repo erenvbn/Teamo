@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Persistence.Repository.IRepository;
 using System.ComponentModel.DataAnnotations.Schema;
 using Teamo_API.Models.DTO;
 
@@ -14,21 +15,23 @@ namespace Teamo_API.Controllers
     [ApiController]
     public class AssignmentController : BaseAPIController
     {
-        //Dependency injection for DataContext
-        private readonly DataContext _dataContext;
-
+        //Dependency injection for db
+        private readonly IAssignmentRepository _dbAssignment;
+        private readonly IProjectRepository _dbProject;
         //Dependency injection for AutoMapper
         private readonly IMapper _mapper;
-        public AssignmentController(DataContext dataContext, IMapper mapper)
+
+        public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IMapper mapper)
         {
-            _dataContext = dataContext;
+            _dbAssignment = dbAssignment;
+            _dbProject = dbProject;
             _mapper = mapper;
         }
 
         [HttpGet(Name ="GetAssignments")]
         public async Task<ActionResult<List<AssignmentDTO>>> GetAssignments()
         {
-            IEnumerable<Assignment> assignmentList = await _dataContext.Assignments.ToListAsync();
+            IEnumerable<Assignment> assignmentList = await _dbAssignment.GetAllAsync();
             return Ok(_mapper.Map<List<AssignmentDTO>>(assignmentList));
         }
 
@@ -41,7 +44,7 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dataContext.Assignments.FindAsync(id);
+                return await _dbAssignment.GetAsync(u=> u.Id == id);
             }
         }
 
@@ -54,20 +57,19 @@ namespace Teamo_API.Controllers
         {
             try
             {
-                if(assignmentDTO == null)
+                if (assignmentDTO == null)
                 {
                     return BadRequest();
                 }
                 else
                 {
-                    assignmentDTO.Id = _dataContext.Assignments.OrderByDescending(u => u.Id).First().Id+1;
+                    var assignments = await _dbAssignment.GetAllAsync();
+                    assignmentDTO.Id = assignments.OrderByDescending(u => u.Id).First().Id + 1;
 
-                    var project = new Project();
-                    project = _dataContext.Projects.Find(assignmentDTO.ProjectId);
+                    var project = _dbProject.GetAsync(u=>u.Id == assignmentDTO.Id);
                     var assignment = _mapper.Map<Assignment>(assignmentDTO);
 
-                    await _dataContext.Assignments.AddAsync(assignment);
-                    await _dataContext.SaveChangesAsync();
+                    await _dbAssignment.CreateAsync(assignment);
                     return CreatedAtRoute("GetAssignments", new { id = assignmentDTO.Id }, assignmentDTO);
                 }
             }
@@ -90,15 +92,14 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (!_dataContext.Assignments.Any(u => u.Id == id))
+                else if (_dbAssignment.GetAsync(u=> u.Id == id) == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    var assignment = _dataContext.Assignments.Find(id);
-                    _dataContext.Remove(assignment);
-                    await _dataContext.SaveChangesAsync();
+                    _dbAssignment.RemoveAsync(id);
+                    await _dbAssignment.SaveAsync();
                     return NoContent();
                 }
             }
@@ -117,24 +118,24 @@ namespace Teamo_API.Controllers
         {
             try
             {
-                if (id<=0)
-                {
-                    return BadRequest();
-                }
-                else if (!_dataContext.Assignments.Any(u => u.Id == id))
+                var assignments = await _dbAssignment.GetAllAsync();
+                if (!assignments.Any(u => u.Id == id))
                 {
                     return NotFound();
                 }
-                else
+
+                var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
+                if (assignment == null)
                 {
-
-                    var assignment = _dataContext.Assignments.Find(id);
-                    assignment = _mapper.Map<Assignment>(assignmentDTO);
-
-                    _dataContext.Assignments.Update(assignment);
-                    await _dataContext.SaveChangesAsync();
-                    return NoContent();
+                    return NotFound();
                 }
+
+                _mapper.Map(assignmentDTO, assignment);
+
+                await _dbAssignment.UpdateAsync(assignment);
+                await _dbAssignment.SaveAsync();
+
+                return NoContent();
             }
             catch (Exception ex)
             {

@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <!-- Onload Method on body -->
-    <body onload="FetchData()">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css">
 
-        <div id="main">
-            <ul id="Projects">Projects</ul>
-            <button onclick="FetchData(Project)"> Show Projects </button>
-            <button onclick="FetchData(Assignment)"> Show Assignments </button>
-            <button onclick="FetchData(Comment)"> Comments </button>
-            <button onclick="FetchData(User)"> Show Users </button>
-
-        </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="js/index.js"></script>
+  </head>
 
 
-        <script src="index.js" ></script>
-    </body>
+  <body onload="FetchData('Assignment')">
+    <div id="navbarHeader">Eren</div>
+    <div id="main">
+      <ul id="AssignmentList">
+        Projects
+      </ul>
+      <button onclick="FetchData('Assignment')">Show Assignment</button>
+    </div>
+  </body>
+
+
+  <script>
+    $(document).ready(function () {
+      $("#content1").load("links-partial.html");
+      $("#content1").load("header-partial.html");
+    });
+  </script>
 </html>

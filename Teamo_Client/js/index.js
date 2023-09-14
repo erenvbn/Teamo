@@ -1,5 +1,5 @@
 function ShowAssignmentList(list) {
-    const assignmentList = document.getElementById("Projects");
+    const assignmentList = document.getElementById("AssignmentList");
     for (let i = 0; i < list.length; i++) {
       const liElement = document.createElement("li");
       liElement.innerText = list[i].title;

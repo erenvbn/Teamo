@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Repository;
+using Persistence.Repository.IRepository;
 using Teamo_API;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,12 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Cross Origin Policy
-builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
@@ -43,7 +50,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("MyPolicy");
+app.UseCors("AllowAnyOrigin");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
