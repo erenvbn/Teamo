@@ -179,7 +179,7 @@ namespace Persistence
                     Text = "This assignment is very challenging",
                     CreatedAt = new DateTime(2023, 9, 21),
                     AssignmentId = 1,
-                    AuthorId = 1
+                    UserId = 1
                 },
 
                 new Comment
@@ -188,7 +188,7 @@ namespace Persistence
                     Text = "I agree, we need to work hard on this",
                     CreatedAt = new DateTime(2023, 9, 22),
                     AssignmentId = 1,
-                    AuthorId = 2
+                    UserId = 2
                 },
 
                 new Comment
@@ -197,7 +197,7 @@ namespace Persistence
                     Text = "This assignment is very fun",
                     CreatedAt = new DateTime(2023, 9, 26),
                     AssignmentId = 2,
-                    AuthorId = 3
+                    UserId = 3
                 },
 
                 new Comment
@@ -206,7 +206,7 @@ namespace Persistence
                     Text = "I agree, we can learn a lot from this",
                     CreatedAt = new DateTime(2023, 9, 27),
                     AssignmentId = 2,
-                    AuthorId = 4
+                    UserId = 4
                 },
 
                 new Comment
@@ -215,7 +215,7 @@ namespace Persistence
                     Text = "This assignment is very interesting",
                     CreatedAt = new DateTime(2023, 11, 21),
                     AssignmentId = 3,
-                    AuthorId = 1
+                    UserId = 1
                 },
 
                  new Comment
@@ -224,7 +224,7 @@ namespace Persistence
                      Text = "I agree, we can use some cool features of the device",
                      CreatedAt = new DateTime(2023, 11, 22),
                      AssignmentId = 3,
-                     AuthorId = 2
+                     UserId = 2
                  },
 
                   new Comment
@@ -233,7 +233,7 @@ namespace Persistence
                       Text = "This assignment is very creative",
                       CreatedAt = new DateTime(2023, 12, 21),
                       AssignmentId = 4,
-                      AuthorId = 3
+                      UserId = 3
                   },
 
                    new Comment
@@ -242,7 +242,7 @@ namespace Persistence
                        Text = "I agree, we can make a fun game with Unity",
                        CreatedAt = new DateTime(2023, 12, 22),
                        AssignmentId = 4,
-                       AuthorId = 4
+                       UserId = 4
                    }
             );
         }

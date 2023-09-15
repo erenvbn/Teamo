@@ -48,8 +48,8 @@ namespace Persistence.Repository
 
         public async Task RemoveAsync(int id)
         {
-            var User = _dataContext.Users.Find(id);
-            _dataContext.Users.Remove(User);
+            var user = _dataContext.Users.Find(id);
+            _dataContext.Users.Remove(user);
             await SaveAsync();
         }
 

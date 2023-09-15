@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Persistence;
-using Teamo_API;
 using Teamo_API.Models.DTO;
 
 namespace Teamo_API

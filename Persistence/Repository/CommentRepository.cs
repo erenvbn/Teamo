@@ -48,8 +48,8 @@ namespace Persistence.Repository
 
         public async Task RemoveAsync(int id)
         {
-            var Comment = _dataContext.Comments.Find(id);
-            _dataContext.Comments.Remove(Comment);
+            var comment = _dataContext.Comments.Find(id);
+            _dataContext.Comments.Remove(comment);
             await SaveAsync();
         }
 

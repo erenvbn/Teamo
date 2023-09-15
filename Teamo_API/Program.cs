@@ -19,6 +19,12 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    // other configurations
+//    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+//});
+
 //Cross Origin Policy
 builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin", builder =>
 {

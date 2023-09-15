@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace Teamo_API.Controllers
         private readonly IProjectRepository _dbProject;
         //Dependency injection for AutoMapper
         private readonly IMapper _mapper;
+
 
         public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IMapper mapper)
         {
@@ -65,12 +67,11 @@ namespace Teamo_API.Controllers
                 {
                     var assignments = await _dbAssignment.GetAllAsync();
                     assignmentDTO.Id = assignments.OrderByDescending(u => u.Id).First().Id + 1;
-
                     var project = _dbProject.GetAsync(u=>u.Id == assignmentDTO.Id);
                     var assignment = _mapper.Map<Assignment>(assignmentDTO);
 
                     await _dbAssignment.CreateAsync(assignment);
-                    return CreatedAtRoute("GetAssignments", new { id = assignmentDTO.Id }, assignmentDTO);
+                    return CreatedAtRoute("GetAssignments", new { id = assignment.Id }, assignment);
                 }
             }
             catch (Exception ex)
@@ -92,13 +93,13 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (_dbAssignment.GetAsync(u=> u.Id == id) == null)
+                else if (await _dbAssignment.GetAsync(u=> u.Id == id) == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    _dbAssignment.RemoveAsync(id);
+                    await _dbAssignment.RemoveAsync(id);
                     await _dbAssignment.SaveAsync();
                     return NoContent();
                 }
@@ -113,7 +114,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name ="UpdateAssignment")]
+        [HttpPut("Update/{id:int}", Name = "UpdateAssignment")]
         public async Task<IActionResult> UpdateAssignment(int id, [FromBody] AssignmentDTO assignmentDTO)
         {
             try
@@ -123,19 +124,81 @@ namespace Teamo_API.Controllers
                 {
                     return NotFound();
                 }
+                else
+                {
+                    var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
+                    assignment = _mapper.Map(assignmentDTO, assignment);
+                    await _dbAssignment.UpdateAsync(assignment);
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
-                var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
-                if (assignment == null)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("AddUsers/{id:int}", Name = "AddUsersToAssignment")]
+        public async Task<IActionResult> AddUsersToAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
+        {
+            try
+            {
+                var assignments = await _dbAssignment.GetAllAsync();
+                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
                 {
                     return NotFound();
                 }
+                else if(assignmentUserDTO.UserIds==null)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    //Finding the specific assignment object
+                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+                    //Adding new UserIds to this specific assignment object
+                    assignment.UserIds.AddRange(assignmentUserDTO.UserIds);
+                    await _dbAssignment.SaveAsync();
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
-                _mapper.Map(assignmentDTO, assignment);
-
-                await _dbAssignment.UpdateAsync(assignment);
-                await _dbAssignment.SaveAsync();
-
-                return NoContent();
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("RemoveUsers/{id:int}", Name = "RemoveUsersFromAssignment")]
+        public async Task<IActionResult> RemoveUsersFromAssignment(int id,[FromBody] AssignmentUserDTO assignmentUserDTO)
+        {
+            try
+            {
+                var assignments = await _dbAssignment.GetAllAsync();
+                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+                {
+                    return NotFound();
+                }
+                else if (assignmentUserDTO.UserIds == null)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    //Finding the specific assignment object
+                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+                    //Adding new UserIds to this specific assignment object
+                    assignment.UserIds.RemoveAll(u => assignmentUserDTO.UserIds.Contains(u));
+                    await _dbAssignment.SaveAsync();
+                    return NoContent();
+                }
             }
             catch (Exception ex)
             {

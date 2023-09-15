@@ -11,6 +11,7 @@ namespace Persistence
         public string Password { get; set; }
 
         // Navigation properties
-        public ICollection<Comment> Comments { get; set; } // Collection navigation
+        public List<int> CommentIds { get; set; } // Collection navigation
+        public List<int> AssignmentIds { get; set; }
     }
 }

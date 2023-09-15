@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Persistence;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Teamo_API
+namespace Teamo_API.Models.DTO
 {
     public class AssignmentDTO
     {
@@ -11,6 +12,9 @@ namespace Teamo_API
         public DateTime DueDate { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
-        public int ProjectId { get; set; } // Foreign key
+
+        ////Navigation Properties
+        //public int ProjectId { get; set; } // Foreign key
+        //public ICollection<int> UserIds { get; set; } //User Collection
     }
 }
