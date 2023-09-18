@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Persistence.Models;
 using Persistence.Repository.IRepository;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Teamo_API.Models.DTO;
 
 namespace Teamo_API.Controllers
@@ -19,18 +21,21 @@ namespace Teamo_API.Controllers
         //Dependency injection for db
         private readonly IAssignmentRepository _dbAssignment;
         private readonly IProjectRepository _dbProject;
+        private readonly IAssignmentUserRepository _dbAssignmentUser;
         //Dependency injection for AutoMapper
         private readonly IMapper _mapper;
 
 
-        public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IMapper mapper)
+        public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IAssignmentUserRepository dbAssignmentUser,IMapper mapper)
         {
             _dbAssignment = dbAssignment;
             _dbProject = dbProject;
+            _dbAssignmentUser = dbAssignmentUser;
+
             _mapper = mapper;
         }
 
-        [HttpGet(Name ="GetAssignments")]
+        [HttpGet(Name = "GetAssignments")]
         public async Task<ActionResult<List<AssignmentDTO>>> GetAssignments()
         {
             IEnumerable<Assignment> assignmentList = await _dbAssignment.GetAllAsync();
@@ -46,14 +51,13 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbAssignment.GetAsync(u=> u.Id == id);
+                return await _dbAssignment.GetAsync(u => u.Id == id);
             }
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         [HttpPost]
         public async Task<ActionResult<AssignmentDTO>> CreateAssignment([FromBody] AssignmentDTO assignmentDTO)
         {
@@ -67,7 +71,7 @@ namespace Teamo_API.Controllers
                 {
                     var assignments = await _dbAssignment.GetAllAsync();
                     assignmentDTO.Id = assignments.OrderByDescending(u => u.Id).First().Id + 1;
-                    var project = _dbProject.GetAsync(u=>u.Id == assignmentDTO.Id);
+                    var project = _dbProject.GetAsync(u => u.Id == assignmentDTO.Id);
                     var assignment = _mapper.Map<Assignment>(assignmentDTO);
 
                     await _dbAssignment.CreateAsync(assignment);
@@ -93,7 +97,7 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (await _dbAssignment.GetAsync(u=> u.Id == id) == null)
+                else if (await _dbAssignment.GetAsync(u => u.Id == id) == null)
                 {
                     return NotFound();
                 }
@@ -114,89 +118,74 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("Update/{id:int}", Name = "UpdateAssignment")]
-        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] AssignmentDTO assignmentDTO)
+        [HttpPut("Update/{assignmentId:int}", Name = "UpdateAssignment")]
+        //[HttpPut("{id:int}", Name = "UpdateAssignment")]
+        public async Task<IActionResult> UpdateAssignment(int assignmentId, [FromBody] AssignmentUpdateDTO assignmentUpdateDTO)
         {
             try
             {
-                var assignments = await _dbAssignment.GetAllAsync();
-                if (!assignments.Any(u => u.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
-                    assignment = _mapper.Map(assignmentDTO, assignment);
-                    await _dbAssignment.UpdateAsync(assignment);
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                return StatusCode(500, "Internal Server Error");
-            }
-        }
+                var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentId);
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("AddUsers/{id:int}", Name = "AddUsersToAssignment")]
-        public async Task<IActionResult> AddUsersToAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
-        {
-            try
-            {
-                var assignments = await _dbAssignment.GetAllAsync();
-                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+                if (assignment == null)
                 {
                     return NotFound();
                 }
-                else if(assignmentUserDTO.UserIds==null)
-                {
-                    return NoContent();
-                }
                 else
                 {
-                    //Finding the specific assignment object
-                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
-                    //Adding new UserIds to this specific assignment object
-                    assignment.UserIds.AddRange(assignmentUserDTO.UserIds);
-                    await _dbAssignment.SaveAsync();
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                return StatusCode(500, "Internal Server Error");
-            }
-        }
+                    var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
+                    switch (assignmentUpdateDTO.OperationType)
+                    {
+                        case "updateAssignment":
+                            // Update assignment logic
+                            assignment = _mapper.Map(assignmentUpdateDTO.AssignmentDTO, assignment);
+                            await _dbAssignment.UpdateAsync(assignment);
+                            break;
+                        case "addUsers":
+                            // Add users to AssignmentUser logic
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("RemoveUsers/{id:int}", Name = "RemoveUsersFromAssignment")]
-        public async Task<IActionResult> RemoveUsersFromAssignment(int id,[FromBody] AssignmentUserDTO assignmentUserDTO)
-        {
-            try
-            {
-                var assignments = await _dbAssignment.GetAllAsync();
-                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
-                {
-                    return NotFound();
-                }
-                else if (assignmentUserDTO.UserIds == null)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    //Finding the specific assignment object
-                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
-                    //Adding new UserIds to this specific assignment object
-                    assignment.UserIds.RemoveAll(u => assignmentUserDTO.UserIds.Contains(u));
-                    await _dbAssignment.SaveAsync();
+                            if (assignmentUpdateDTO.UserIds!=null)
+                            {
+
+                                for (int i = 0; i < assignmentUpdateDTO.UserIds.Count(); i++)
+                                {
+                                    var assignmentUser = new AssignmentUser()
+                                    {
+                                        Id = assignmentUsers.OrderByDescending(u => u.Id).First().Id+1,
+                                        AssignmentId = assignmentUpdateDTO.AssignmentDTO.Id,
+                                        UserId = assignmentUpdateDTO.UserIds[i]
+                                    };
+
+                                    if (!assignmentUsers.Contains(assignmentUser))
+                                    {
+                                        await _dbAssignmentUser.CreateAsync(assignmentUser);
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                    return NoContent();
+                                }
+                            }
+                            break;
+                        case "removeUsers":
+                            // Remove users from AssignmentUser logic
+                            var deletedIds = assignmentUsers
+                                .Where(u => u.AssignmentId == assignmentId && assignmentUpdateDTO.UserIds.Contains(u.UserId))
+                                .Select(u => u.Id)
+                                .ToList();
+                            if (deletedIds!=null)
+                            {
+                                foreach (var id in deletedIds)
+                                {
+                                    await _dbAssignmentUser.RemoveAsync(id);
+                                }
+                                await _dbAssignmentUser.SaveAsync();
+                                return NoContent();
+                            }
+                            break;
+                        default:
+                            return BadRequest("Invalid operationType.");
+                    }
                     return NoContent();
                 }
             }
@@ -208,3 +197,220 @@ namespace Teamo_API.Controllers
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+//        [HttpPut("AddUsers/{id:int}", Name = "AddUsersToAssignment")]
+//        public async Task<IActionResult> AddUsersToAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
+//        {
+//            try
+//            {
+//                var assignments = await _dbAssignment.GetAllAsync();
+//                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+//                {
+//                    return NotFound();
+//                }
+//                else if (assignmentUserDTO.UserIds == null)
+//                {
+//                    return NoContent();
+//                }
+//                else
+//                {
+//                    //Finding the specific assignment object
+//                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+//                    //Adding new UserIds to this specific assignment object
+//                    assignment.UserIds.AddRange(assignmentUserDTO.UserIds);
+//                    await _dbAssignment.SaveAsync();
+//                    return NoContent();
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                System.Diagnostics.Trace.WriteLine(ex.Message);
+//                return StatusCode(500, "Internal Server Error");
+//            }
+//        }
+
+
+
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+//        [HttpPut("RemoveUsers/{id:int}", Name = "RemoveUsersFromAssignment")]
+//        public async Task<IActionResult> RemoveUsersFromAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
+//        {
+//            try
+//            {
+//                var assignments = await _dbAssignment.GetAllAsync();
+//                if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+//                {
+//                    return NotFound();
+//                }
+//                else if (assignmentUserDTO.UserIds == null)
+//                {
+//                    return NoContent();
+//                }
+//                else
+//                {
+//                    //Finding the specific assignment object
+//                    var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+//                    //Adding new UserIds to this specific assignment object
+//                    assignment.UserIds.RemoveAll(u => assignmentUserDTO.UserIds.Contains(u));
+//                    await _dbAssignment.SaveAsync();
+//                    return NoContent();
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                System.Diagnostics.Trace.WriteLine(ex.Message);
+//                return StatusCode(500, "Internal Server Error");
+//            }
+//        }
+//    }
+//}
+
+
+
+
+
+
+
+
+
+
+//[ProducesResponseType(StatusCodes.Status204NoContent)]
+//[ProducesResponseType(StatusCodes.Status400BadRequest)]
+//[ProducesResponseType(StatusCodes.Status404NotFound)]
+//[HttpPut("Update/{id:int}", Name = "UpdateAssignment")]
+//public async Task<IActionResult> UpdateAssignment(int id, [FromBody] AssignmentDTO assignmentDTO)
+//{
+//    try
+//    {
+//        var assignments = await _dbAssignment.GetAllAsync();
+//        if (!assignments.Any(u => u.Id == id))
+//        {
+//            return NotFound();
+//        }
+//        else
+//        {
+//            var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
+//            assignment = _mapper.Map(assignmentDTO, assignment);
+//            await _dbAssignment.UpdateAsync(assignment);
+//            return NoContent();
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        System.Diagnostics.Trace.WriteLine(ex.Message);
+//        return StatusCode(500, "Internal Server Error");
+//    }
+//}
+
+
+//[ProducesResponseType(StatusCodes.Status200OK)]
+//[ProducesResponseType(StatusCodes.Status204NoContent)]
+//[ProducesResponseType(StatusCodes.Status400BadRequest)]
+//[HttpPut("AddUsers/{id:int}", Name = "AddUsersToAssignment")]
+//public async Task<IActionResult> AddUsersToAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
+//{
+//    try
+//    {
+//        var assignments = await _dbAssignment.GetAllAsync();
+//        if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+//        {
+//            return NotFound();
+//        }
+//        else if (assignmentUserDTO.UserIds == null)
+//        {
+//            return NoContent();
+//        }
+//        else
+//        {
+//            //Finding the specific assignment object
+//            var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+//            //Adding new UserIds to this specific assignment object
+//            assignment.UserIds.AddRange(assignmentUserDTO.UserIds);
+//            await _dbAssignment.SaveAsync();
+//            return NoContent();
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        System.Diagnostics.Trace.WriteLine(ex.Message);
+//        return StatusCode(500, "Internal Server Error");
+//    }
+//}
+
+//[ProducesResponseType(StatusCodes.Status200OK)]
+//[ProducesResponseType(StatusCodes.Status204NoContent)]
+//[ProducesResponseType(StatusCodes.Status400BadRequest)]
+//[HttpPut("RemoveUsers/{id:int}", Name = "RemoveUsersFromAssignment")]
+//public async Task<IActionResult> RemoveUsersFromAssignment(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
+//{
+//    try
+//    {
+//        var assignments = await _dbAssignment.GetAllAsync();
+//        if (!assignments.Any(u => u.Id == assignmentUserDTO.AssignmentId))
+//        {
+//            return NotFound();
+//        }
+//        else if (assignmentUserDTO.UserIds == null)
+//        {
+//            return NoContent();
+//        }
+//        else
+//        {
+//            //Finding the specific assignment object
+//            var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentUserDTO.AssignmentId);
+//            //Adding new UserIds to this specific assignment object
+//            assignment.UserIds.RemoveAll(u => assignmentUserDTO.UserIds.Contains(u));
+//            await _dbAssignment.SaveAsync();
+//            return NoContent();
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        System.Diagnostics.Trace.WriteLine(ex.Message);
+//        return StatusCode(500, "Internal Server Error");
+//    }
+//}

@@ -12,6 +12,6 @@ namespace Persistence
         public DateTime EndDate { get; set; }
 
         // Navigation properties
-        public List<int> AssignmentIds { get; set; } // Collection navigation
+        //public List<int> AssignmentIds { get; set; } // Collection navigation
     }
 }

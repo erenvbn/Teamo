@@ -17,7 +17,7 @@ namespace Persistence
 
         [ForeignKey("Project")]
         public int ProjectId { get; set; } // Foreign key
-        public List<int> UserIds { get; set; } //Users collection navigation
+        //public List<int> UserIds { get; set; } //Users collection navigation
 
     }
 }

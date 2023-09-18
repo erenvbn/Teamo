@@ -12,6 +12,7 @@ namespace Teamo_API.Models.DTO
         public DateTime DueDate { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
+        public int ProjectId { get; set; }
 
         ////Navigation Properties
         //public int ProjectId { get; set; } // Foreign key

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Persistence.Models;
 
 namespace Persistence
 {
@@ -17,6 +18,7 @@ namespace Persistence
         public DbSet<Project> Projects { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<AssignmentUser> AssignmentUsers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -244,6 +246,25 @@ namespace Persistence
                        AssignmentId = 4,
                        UserId = 4
                    }
+            );
+
+            // SEED DATA FOR AssignmentUser
+            modelBuilder.Entity<AssignmentUser>().HasData(
+                // Users assigned to Assignment with Id 1 (Database design)
+                new AssignmentUser { Id = 1, AssignmentId = 1, UserId = 1 }, // Eren is assigned
+                new AssignmentUser { Id = 2, AssignmentId = 1, UserId = 2 }, // Emre is assigned
+
+                // Users assigned to Assignment with Id 2 (Web development)
+                new AssignmentUser { Id = 3, AssignmentId = 2, UserId = 2 }, // Emre is assigned
+                new AssignmentUser { Id = 4, AssignmentId = 2, UserId = 4 }, // Mehmet is assigned
+
+                // Users assigned to Assignment with Id 3 (Mobile development)
+                new AssignmentUser { Id = 5, AssignmentId = 3, UserId = 1 }, // Eren is assigned
+                new AssignmentUser { Id = 6, AssignmentId = 3, UserId = 2 }, // Emre is assigned
+
+                // Users assigned to Assignment with Id 4 (Game development)
+                new AssignmentUser { Id = 7, AssignmentId = 4, UserId = 3 }, // Bengü is assigned
+                new AssignmentUser { Id = 8, AssignmentId = 4, UserId = 4 }  // Mehmet is assigned
             );
         }
     }
