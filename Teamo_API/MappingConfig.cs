@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Persistence;
+using Persistence.Models;
 using Teamo_API.Models.DTO;
 
 namespace Teamo_API
@@ -16,6 +17,8 @@ namespace Teamo_API
             CreateMap<ProjectDTO, Project>().ReverseMap();
 
             CreateMap<CommentDTO, Comment>().ReverseMap();
+
+            CreateMap<AssignmentUserDTO, AssignmentUser>().ReverseMap();
         }
     }
 }

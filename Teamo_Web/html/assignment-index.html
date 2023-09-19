@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/js/index.js"></script>
+    <div id="navbarHeader"></div>
+  </head>
+
+  <body>
+    <div class="d-flex flex-lg-row justify-content-around mt-5">
+      <div class="d-flex flex-lg-row justify-content-around col-lg-5">
+
+        <div class="list-group text-center col-0">
+          <li
+            id="AssignmentId"
+            class="bg-dark-subtle list-group text-center text-primary">
+            Id
+          </li>
+        </div>
+        <div class="list-group col-lg-9">
+          <li
+            id="AssignmentList"
+            class="bg-dark-subtle list-group text-center text-primary">
+            Assignments
+          </li>
+        </div>
+        <div class="list-group col-lg-2">
+          <li
+            id="Assignees"
+            class="bg-dark-subtle list-group text-center text-primary">
+            Assignees
+          </li>
+        </div>
+
+      </div>
+        <div class="col-lg-5">
+          <ul
+            id="AssignmentDueDate"
+            class="bg-dark-subtle list-group text-center">
+            Remaining Days
+          </ul>
+        </div>
+
+      </div>
+      </div>
+
+      <p id="JsonParagraph">asdasd</p>
+
+    <!-- JavaScript block to fetch data when the page loads -->
+    <script>
+      // Call FetchSingleProperty for EntityList2
+      FetchSingleProperty("/Assignment", "title", "AssignmentList");
+      FetchSingleProperty("/Assignment", "id", "AssignmentId");
+      FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
+      FetchRemainingDays("/Assignment", "AssignmentDueDate");
+      FetchJSON("/Assignment");
+    </script>
+  </body>
+
+  <footer>
+    <div id="navbarFooter"></div>
+  </footer>
+  <script>
+    $(document).ready(function () {
+      $("#navbarHeader").load("header-partial.html");
+      $("#navbarFooter").load("footer-partial.html");
+    });
+  </script>
+</html>
