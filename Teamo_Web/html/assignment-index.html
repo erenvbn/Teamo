@@ -14,53 +14,85 @@
   </head>
 
   <body>
-    <div class="d-flex flex-lg-row justify-content-around mt-5">
-      <div class="d-flex flex-lg-row justify-content-around col-lg-5">
+      <div class="d-flex flex-lg-row justify-content-around m-3">
+        <div class="col-lg-12">
+          <table class="table table-hover table-responsive">
+            <thead>
+              <tr>
+                <th scope="col" class="col-1">Id</th>
+                <th scope="col" class="col-2">Assignment Title</th>
+                <th scope="col" class="col-2">Assignee Ids</th>
+                <th scope="col" class="col-2">Assignees</th>
+                <th scope="col" class="col-2">Remaining Days</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAssignment">
+              </tr>
+            </tbody>
+          </table>
 
-        <div class="list-group text-center col-0">
-          <li
-            id="AssignmentId"
-            class="bg-dark-subtle list-group text-center text-primary">
-            Id
-          </li>
-        </div>
-        <div class="list-group col-lg-9">
-          <li
-            id="AssignmentList"
-            class="bg-dark-subtle list-group text-center text-primary">
-            Assignments
-          </li>
-        </div>
-        <div class="list-group col-lg-2">
-          <li
-            id="Assignees"
-            class="bg-dark-subtle list-group text-center text-primary">
-            Assignees
-          </li>
-        </div>
 
-      </div>
-        <div class="col-lg-5">
-          <ul
-            id="AssignmentDueDate"
-            class="bg-dark-subtle list-group text-center">
-            Remaining Days
-          </ul>
-        </div>
-
-      </div>
-      </div>
 
       <p id="JsonParagraph">asdasd</p>
+<!-- 
+      <div class="d-flex flex-lg-row justify-content-around mt-5">
+        <div class="d-flex flex-lg-row justify-content-around col-lg-5">
+  
+          <div class="list-group text-center col-0">
+            <li
+              id="AssignmentId"
+              class="bg-dark-subtle list-group text-center text-primary">
+              Id
+            </li>
+          </div>
+          <div class="list-group col-lg-9">
+            <li
+              id="AssignmentList"
+              class="bg-dark-subtle list-group text-center text-primary">
+              Assignments
+            </li>
+          </div>
+  
+          <div class="list-group col-lg-3">
+            <li
+              id="AssignmentIds"
+              class="bg-dark-subtle list-group text-center text-primary">
+              AssignmentIds
+            </li>
+          </div>
+  
+          <div class="list-group col-lg-2">
+            <li
+              id="Assignees"
+              class="bg-dark-subtle list-group text-center text-primary">
+              Assignees
+            </li>
+          </div>
+  
+        </div>
+          <div class="col-lg-5">
+            <ul
+              id="AssignmentDueDate"
+              class="bg-dark-subtle list-group text-center">
+              Remaining Days
+            </ul>
+          </div>
+  
+        </div>
+        </div> -->
+
+      
 
     <!-- JavaScript block to fetch data when the page loads -->
     <script>
       // Call FetchSingleProperty for EntityList2
-      FetchSingleProperty("/Assignment", "title", "AssignmentList");
-      FetchSingleProperty("/Assignment", "id", "AssignmentId");
-      FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
-      FetchRemainingDays("/Assignment", "AssignmentDueDate");
+      // FetchSingleProperty("/Assignment", "title", "AssignmentList");
+      // FetchSingleProperty("/Assignment", "id", "AssignmentId");
+      // FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
+      // FetchSingleProperty("/AssignmentUser", "assignmentId", "AssignmentIds");
+      // FetchRemainingDays("/Assignment", "AssignmentDueDate");
       FetchJSON("/Assignment");
+      FetchAssignment();
     </script>
   </body>
 

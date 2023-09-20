@@ -1,15 +1,25 @@
 //CLASSES
 class Assignment {
-  constructor(id, title, description, dueDate, priority, status, projectId) {
+  constructor(
+    id,
+    title,
+    description,
+    dueDate,
+    priority,
+    status,
+    projectId,
+    userIds = [], // Default to an empty array if userIds is not provided
+    userNames = [] // Default to an empty array if userIds is not provided
+  ) {
     this.id = id;
     this.title = title;
     this.description = description;
-    this.dueDate = dueDate;
+    this.dueDate = new Date(dueDate);
     this.priority = priority;
     this.status = status;
     this.projectId = projectId;
-    // If you want to represent UserIds as an array, you can add it here as well.
-    // this.userIds = [];
+    this.userIds = userIds; // Assign the provided userIds or an empty array by default
+    this.userNames = userNames; // Assign the provided userIds or an empty array by default
   }
 }
 
@@ -38,26 +48,25 @@ class AssignmentUser {
 
 class Project {
   constructor(id, name, description, startDate, endDate) {
-      this.id = id;
-      this.name = name;
-      this.description = description;
-      this.startDate = new Date(startDate);
-      this.endDate = new Date(endDate);
-      // If you need AssignmentIds as an array, you can add it here.
-      // this.assignmentIds = [];
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.startDate = new Date(startDate);
+    this.endDate = new Date(endDate);
+    // If you need AssignmentIds as an array, you can add it here.
+    // this.assignmentIds = [];
   }
 }
 
 class Comment {
   constructor(id, text, createdAt, assignmentId, userId) {
-      this.id = id;
-      this.text = text;
-      this.createdAt = new Date(createdAt);
-      this.assignmentId = assignmentId;
-      this.userId = userId;
+    this.id = id;
+    this.text = text;
+    this.createdAt = new Date(createdAt);
+    this.assignmentId = assignmentId;
+    this.userId = userId;
   }
 }
-
 
 //CONSTRAINTS
 const root = "https://localhost:7001/api";
@@ -88,7 +97,7 @@ function FetchSingleProperty(path, propertyName, targetElementId) {
     })
     .then((data) => {
       ShowEntityList(data, propertyName, targetElementId);
-      console.log(data, propertyName);
+      //console.log(data, propertyName);
     })
     .catch((error) => {
       console.log(error);
@@ -101,8 +110,8 @@ function FetchJSON(path) {
       return response.json(); // Use .then() to handle the JSON promise
     })
     .then((data) => {
-      getJSON(data); // Call the rendering function with the data
-      console.log(data);
+      //console.log(data);
+      return writeJSON(data);
     })
     .catch((error) => {
       console.log(error);
@@ -110,7 +119,8 @@ function FetchJSON(path) {
     });
 }
 
-function getJSON(data) {
+//JSON PARAGRAPH EXAMPLE
+function writeJSON(data) {
   try {
     const entityList = document.getElementById("JsonParagraph");
 
@@ -119,13 +129,103 @@ function getJSON(data) {
 
     const createdParagraph = document.createElement("p");
     createdParagraph.innerText = jsonString;
-    console.log(jsonString);
+    //console.log(jsonString);
     entityList.appendChild(createdParagraph);
   } catch (error) {
     console.log(error);
   }
 }
 
+function FetchAssignment() {
+  return Promise.all([
+    fetch(`${root}/Assignment`).then((response) => response.json()),
+    fetch(`${root}/User`).then((response) => response.json()),
+    fetch(`${root}/AssignmentUser`).then((response) => response.json()),
+  ])
+    .then(([assignmentsData, usersData, assignmentUsersData]) => {
+      const assignments = [];
+
+      // Create a mapping from user IDs to user names
+      const userIdToName = {};
+      usersData.forEach((user) => {
+        userIdToName[user.id] = user.name;
+      });
+
+      for (let i = 0; i < assignmentsData.length; i++) {
+        const item = assignmentsData[i];
+        const assignment = new Assignment(
+          item.id,
+          item.title,
+          item.description,
+          item.dueDate,
+          item.priority,
+          item.status,
+          item.projectId,
+          [],
+          []
+        );
+
+        for (let j = 0; j < assignmentUsersData.length; j++) {
+          if (assignmentUsersData[j].assignmentId == assignment.id) {
+            const userId = assignmentUsersData[j].userId;
+            assignment.userIds.push(userId);
+            // Add the user name based on the user ID
+            assignment.userNames.push(userIdToName[userId]);
+          }
+        }
+        assignments.push(assignment);
+      }
+      return assignments;
+    })
+    .then((assignments) => {
+      displayAssignment(assignments);
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
+}
+
+// JSON PARAGRAPH EXAMPLE
+function displayAssignment(assignments) {
+  try {
+    assignments.forEach((assignment) => {
+      const tbody = document.getElementById("tbodyAssignment");
+      const tr = document.createElement("tr");
+      tbody.append(tr);
+      
+      const tdId = document.createElement("td");
+      const tdTitle = document.createElement("td");
+      const tdAssigneesId = document.createElement("td");
+      const tdAssigneesName = document.createElement("td");
+
+      tdId.textContent = assignment.id;
+      tdTitle.textContent = assignment.title;
+      tdAssigneesId.textContent = assignment.userIds;
+      tdAssigneesName.textContent = assignment.userNames;
+
+      tr.appendChild(tdId);
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdAssigneesId);
+      tr.appendChild(tdAssigneesName);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//JSON PARAGRAPH EXAMPLE
+function getJSON(data) {
+  try {
+    // Convert the JSON data to a string for display
+    const jsonString = JSON.stringify(data);
+    return jsonString;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//SHOWING REMAINING DAYS
 function ShowRemainingDays(list, targetElementId) {
   const entityList = document.getElementById(targetElementId);
 
