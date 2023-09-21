@@ -6,103 +6,198 @@
     <title></title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Include jQuery UI -->
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/js/index.js"></script>
     <div id="navbarHeader"></div>
   </head>
 
   <body>
-      <div class="d-flex flex-lg-row justify-content-around m-3">
-        <div class="col-lg-12">
-          <table class="table table-hover table-responsive">
-            <thead>
-              <tr>
-                <th scope="col" class="col-1">Id</th>
-                <th scope="col" class="col-2">Assignment Title</th>
-                <th scope="col" class="col-2">Assignee Ids</th>
-                <th scope="col" class="col-2">Assignees</th>
-                <th scope="col" class="col-2">Remaining Days</th>
-              </tr>
-            </thead>
-            <tbody id="tbodyAssignment">
-              </tr>
-            </tbody>
-          </table>
-
-
-
-      <p id="JsonParagraph">asdasd</p>
-<!-- 
-      <div class="d-flex flex-lg-row justify-content-around mt-5">
-        <div class="d-flex flex-lg-row justify-content-around col-lg-5">
-  
-          <div class="list-group text-center col-0">
-            <li
-              id="AssignmentId"
-              class="bg-dark-subtle list-group text-center text-primary">
-              Id
-            </li>
-          </div>
-          <div class="list-group col-lg-9">
-            <li
-              id="AssignmentList"
-              class="bg-dark-subtle list-group text-center text-primary">
-              Assignments
-            </li>
-          </div>
-  
-          <div class="list-group col-lg-3">
-            <li
-              id="AssignmentIds"
-              class="bg-dark-subtle list-group text-center text-primary">
-              AssignmentIds
-            </li>
-          </div>
-  
-          <div class="list-group col-lg-2">
-            <li
-              id="Assignees"
-              class="bg-dark-subtle list-group text-center text-primary">
-              Assignees
-            </li>
-          </div>
-  
+    <div class="flex-row row col-12 justify-content-between">
+      <div class="d-grid gap-2 row m-3 col-6">
+        <!-- Adjusted column size -->
+        <button id="flip" class="btn bg-feedback-success" type="button">
+          Create Assignment(✚)
+        </button>
+      </div>
+      <div class="d-grid gap-2 row m-3 col-2">
+        <button id="deleteAssignmentButton" type="submit" class="btn bg-feedback-error">Delete</button>
+      </div>
+    </div>
+    <div>
+      <!-- Create Assignment Form  -->
+      <div class="flex-row row col-12 justify-content-between text-bg-primary">
+        <div id="panel">
+          <form
+            id="createAssignmentForm"
+            action=""
+            method="post"
+            class="d-grid gap-2 row m-3 col-6"
+          >
+            <!-- Adjusted column size -->
+            <div>
+              <label for="assignmentProjectId">Project:</label>
+              <select
+                class="form-control"
+                id="assignmentProjectIdInput"
+                name="assignmentProjectId"
+              >
+                <!-- Options for ProjectList -->
+              </select>
+            </div>
+            <div>
+              <label for="assignmentTitle">Assignment Title:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="assignmentTitleInput"
+                name="assignmentTitle"
+              />
+            </div>
+            <div>
+              <label for="assignmentDescription">Description:</label>
+              <textarea
+                class="form-control"
+                id="assignmentDescriptionInput"
+                name="assignmentDescription"
+                rows="4"
+              ></textarea>
+            </div>
+            <div>
+              <label for="assignmentDueDate">Due Date:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="assignmentDueDateInput"
+                name="assignmentDueDate"
+              />
+            </div>
+            <div>
+              <label for="assignmentPriority">Priority</label>
+              <select
+                class="form-control"
+                id="assignmentPriorityInput"
+                name="assignmentPriority"
+              >
+                <option>Unknown</option>
+                <option>Low Priority</option>
+                <option>Neutral</option>
+                <option>High Priority</option>
+                <option>Critical</option>
+              </select>
+            </div>
+            <div>
+              <label for="assignmentStatus">Status</label>
+              <select
+                class="form-control"
+                id="assignmentStatusInput"
+                name="assignmentStatus"
+              >
+                <option>Pending</option>
+                <option>In Process</option>
+                <option>Completed</option>
+                <option>Canceled</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-secondary border-0 bg-feedback-success text-black mt-2"
+              onclick=""
+            >
+              Create Assignment
+            </button>
+          </form>
         </div>
-          <div class="col-lg-5">
-            <ul
-              id="AssignmentDueDate"
-              class="bg-dark-subtle list-group text-center">
-              Remaining Days
-            </ul>
-          </div>
-  
-        </div>
-        </div> -->
-
-      
-
+      </div>
+    </div>
+    <div class="d-flex flex-lg-row justify-content-around m-3 text-center">
+      <div class="col-lg-12">
+        <table class="table table-hover table-responsive text-center">
+          <thead>
+            <tr>
+              <th scope="col" class="col-1">Id</th>
+              <th scope="col" class="col-3">Assignment Title</th>
+              <th scope="col" class="col-1">Assignee Ids</th>
+              <th scope="col" class="col-2">Assignees</th>
+              <th scope="col" class="col-2">Remaining Days</th>
+              <th scope="col" class="col-1">Selected</th>
+              <!-- Adjusted column size -->
+            </tr>
+          </thead>
+          <tbody id="tbodyAssignment">
+            <!-- Table rows here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p id="JsonParagraph">asdasd</p>
     <!-- JavaScript block to fetch data when the page loads -->
-    <script>
-      // Call FetchSingleProperty for EntityList2
-      // FetchSingleProperty("/Assignment", "title", "AssignmentList");
-      // FetchSingleProperty("/Assignment", "id", "AssignmentId");
-      // FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
-      // FetchSingleProperty("/AssignmentUser", "assignmentId", "AssignmentIds");
-      // FetchRemainingDays("/Assignment", "AssignmentDueDate");
-      FetchJSON("/Assignment");
-      FetchAssignment();
-    </script>
   </body>
 
   <footer>
     <div id="navbarFooter"></div>
   </footer>
+
+  <!--SCRIPT FOR PRELOADED ELEMENTS -->
   <script>
     $(document).ready(function () {
       $("#navbarHeader").load("header-partial.html");
       $("#navbarFooter").load("footer-partial.html");
     });
   </script>
+
+  <script>
+    // Call FetchSingleProperty for EntityList2
+    // FetchSingleProperty("/Assignment", "title", "AssignmentList");
+    // FetchSingleProperty("/Assignment", "id", "AssignmentId");
+    // FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
+    // FetchSingleProperty("/AssignmentUser", "assignmentId", "AssignmentIds");
+    //FetchRemainingDays("/Assignment", "tbodyAssignment");
+    //FetchJSON("/Assignment");
+    FetchAndLoadProperty("/Project", "id", "name", "assignmentProjectIdInput");
+    FetchAssignment("tbodyAssignment");
+  </script>
+
+  <!--SCRIPT FOR CREATE ASSIGNMENT SLIDE -->
+  <script>
+    let count = 0;
+    $(document).ready(function () {
+      $("#flip").click(function () {
+        $("#panel").slideToggle("slow");
+        count++;
+        console.log(count);
+        if (count % 2 != 0) {
+          $("#flip").css("color", "gray");
+          $("#flip").toggleClass("bg-feedback-success");
+          $("#flip").text("Compose △");
+          $("#flip").css("background-color", "var(--neutral-gray)");
+        } else {
+          $("#flip").text("Create Assignment(✚)");
+          $("#flip").css("color", "black");
+          $("#flip").css("background-color", "var(--feedback-success)");
+        }
+      });
+    });
+  </script>
+
+  <!-- DATEPICKER -->
+  <script>
+    $(document).ready(function () {
+      $("#datepicker").datepicker();
+    });
+  </script>
+
+  <!--STYLE -->
+  <style>
+    #panel {
+      display: none;
+    }
+  </style>
 </html>

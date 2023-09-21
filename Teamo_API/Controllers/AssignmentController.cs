@@ -88,7 +88,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete]
+        [HttpDelete("api/removeAssignment")]
         public async Task<IActionResult> RemoveAssignment(int id)
         {
             try

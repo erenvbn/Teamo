@@ -8,3 +8,64 @@
     border-radius: 5px;
     color: white;
   }
+
+  :root {
+    /* Primary Colors */
+    --primary-bg: #B3D4E0; /* Paler main background color */
+    --primary-text: #FFFFFF; /* Main text color */
+  
+    /* Secondary Colors */
+    --secondary-bg: #F0F2F4; /* Paler secondary background color */
+    --secondary-text: #5E748D; /* Paler secondary text color */
+  
+    /* Accent Colors */
+    --accent-green: #cff1c2; /* Paler green for success or positive actions */
+    --accent-yellow: #F8E89B; /* Paler yellow for warnings or alerts */
+    --accent-red: #E39D91; /* Paler red for errors or critical actions */
+    --accent-blue: #85C9E9; /* Paler blue for links or highlights */
+  
+    /* Additional Colors */
+    --neutral-gray: #D4DDE6; /* Paler neutral gray for borders or separators */
+    --neutral-light-gray: #E9EBEF; /* Paler light gray for backgrounds or inactive elements */
+    --neutral-dark-gray: #8999A8; /* Paler dark gray for headings or icons */
+  
+    /* Feedback Colors */
+    --feedback-success: #cff1c2; /* Paler success feedback */
+    --feedback-warning: #F8E89B; /* Paler warning feedback */
+    --feedback-error: #E39D91; /* Paler error feedback */
+    --feedback-info: #85C9E9; /* Paler info feedback */
+  
+    /* Status Colors */
+    --status-open: #cff1c2; /* Paler status for open tasks or items */
+    --status-in-progress: #FFC679; /* Paler status for in-progress tasks or items */
+    --status-done: #9ACCE9; /* Paler status for completed tasks or items */
+  }
+  
+  
+  .bg-main{
+    background-color: var(--primary-bg);
+  }
+
+  .bg-accent-green{
+    background-color: var(--accent-green);
+  }
+
+  .bg-accent-neutral-gray{
+    background-color: var(--neutral-gray);
+  }
+
+  .bg-accent-red{
+    background-color: var(--accent-red);
+  }
+
+  .bg-feedback-success{
+    background-color: var(--feedback-success);
+  }
+
+  .bg-feedback-error{
+    background-color: var(--feedback-error);
+  }
+
+  #flip{
+    background-color: var(--feedback-success);
+  }

@@ -104,6 +104,35 @@ function FetchSingleProperty(path, propertyName, targetElementId) {
     });
 }
 
+function FetchAndLoadProperty(
+  path,
+  propertyName1,
+  propertyName2,
+  targetElementId
+) {
+  fetch(`${root}${path}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      LoadEntityList(data, propertyName1, propertyName2, targetElementId);
+      //console.log(data, propertyName);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+//SHOW ENTITY LIST
+function LoadEntityList(list, propertyName1, propertyName2, targetElementId) {
+  const optionList = document.getElementById(targetElementId);
+  for (let i = 0; i < list.length; i++) {
+    const optionElement = document.createElement("option");
+    optionElement.innerText = `${list[i][propertyName1]}-${list[i][propertyName2]}`;
+    optionList.appendChild(optionElement);
+  }
+}
+
 function FetchJSON(path) {
   return fetch(`${root}${path}`)
     .then((response) => {
@@ -136,7 +165,7 @@ function writeJSON(data) {
   }
 }
 
-function FetchAssignment() {
+function FetchAssignment(targetElementId) {
   return Promise.all([
     fetch(`${root}/Assignment`).then((response) => response.json()),
     fetch(`${root}/User`).then((response) => response.json()),
@@ -178,7 +207,7 @@ function FetchAssignment() {
       return assignments;
     })
     .then((assignments) => {
-      displayAssignment(assignments);
+      displayAssignment(assignments, targetElementId);
     })
     .catch((error) => {
       console.log(error);
@@ -186,32 +215,113 @@ function FetchAssignment() {
     });
 }
 
-// JSON PARAGRAPH EXAMPLE
-function displayAssignment(assignments) {
+const checkedCheckboxIds = [];
+
+// Define SelectRowProperty at the global scope
+function SelectRowProperty(checkbox) {
+  const selectedRow = checkbox.closest("tr");
+  const checkedAssignmentIdValue =
+    selectedRow.querySelector("td:first-child").textContent;
+
+  if (selectedRow != null) {
+    if (!checkedCheckboxIds.includes(checkedAssignmentIdValue)) {
+      checkedCheckboxIds.push(checkedAssignmentIdValue);
+      console.log(`Added ${checkedAssignmentIdValue}`);
+      console.log(checkedCheckboxIds);
+    } else {
+      const index = checkedCheckboxIds.indexOf(checkedAssignmentIdValue);
+      if (index !== -1) {
+        checkedCheckboxIds.splice(index, 1); // Remove the value from the array
+        console.log(`Removed ${checkedAssignmentIdValue}`);
+        console.log(checkedCheckboxIds);
+      }
+    }
+  }
+}
+
+function displayAssignment(assignments, targetElementId) {
   try {
     assignments.forEach((assignment) => {
-      const tbody = document.getElementById("tbodyAssignment");
+      const tbody = document.getElementById(targetElementId);
       const tr = document.createElement("tr");
-      tbody.append(tr);
-      
+      tbody.appendChild(tr);
+
       const tdId = document.createElement("td");
       const tdTitle = document.createElement("td");
       const tdAssigneesId = document.createElement("td");
       const tdAssigneesName = document.createElement("td");
+      const tdSelection = document.createElement("td");
+
+      //Creating a Checkbox
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.addEventListener("change", (e) => {
+        if (e.target.type == "checkbox") {
+          e.preventDefault();
+          SelectRowProperty(e.target);
+        }
+      });
 
       tdId.textContent = assignment.id;
       tdTitle.textContent = assignment.title;
       tdAssigneesId.textContent = assignment.userIds;
       tdAssigneesName.textContent = assignment.userNames;
 
+      // Call ShowRemainingDays to get the td element with the progress bar
+      //This method returns a tdElement with progressbar
+      const tdRemainingDay = ShowRemainingDays(assignment);
+
+      tdSelection.appendChild(checkbox);
       tr.appendChild(tdId);
       tr.appendChild(tdTitle);
       tr.appendChild(tdAssigneesId);
       tr.appendChild(tdAssigneesName);
+      tr.appendChild(tdRemainingDay); // Append the progress bar td to the row
+      tr.appendChild(tdSelection);
     });
   } catch (error) {
     console.log(error);
   }
+}
+console.log(checkedCheckboxIds);
+
+// Updated ShowRemainingDays function to return the td element
+function ShowRemainingDays(assignment) {
+  const tdElement = document.createElement("td");
+
+  const dueDate = new Date(assignment.dueDate);
+  const timeDifference = dueDate - new Date();
+  const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  const progressBar = document.createElement("progress");
+  progressBar.style.width = "100%";
+  progressBar.classList.add("progress", "progress-bar", "bg-success");
+  progressBar.value = remainingDays; // Set the progress value
+  progressBar.max = 200; // Set the maximum progress value
+
+  if (remainingDays > 0) {
+    tdElement.innerText = `Left: ${remainingDays.toString()} Days`;
+  } else {
+    tdElement.innerText = `Completed`;
+  }
+  tdElement.appendChild(progressBar);
+
+  return tdElement; // Return the td element containing the progress bar
+}
+
+//Calculate remaining days of assignments and projects
+function FetchRemainingDays(path, targetElementId) {
+  fetch(`${root}${path}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((assignments) => {
+      ShowRemainingDays(assignments, targetElementId);
+      console.log(assignments);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 //JSON PARAGRAPH EXAMPLE
@@ -225,51 +335,141 @@ function getJSON(data) {
   }
 }
 
-//SHOWING REMAINING DAYS
-function ShowRemainingDays(list, targetElementId) {
-  const entityList = document.getElementById(targetElementId);
+document.addEventListener("DOMContentLoaded", function () {
+  //CREATE ASSIGNMENT
+  //ASSIGNMENT  EVENT LISTENER
+  const createAssignmentForm = document.getElementById("createAssignmentForm");
+  createAssignmentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    //PRIORITY
+    const selectedPriorityValue = createAssignmentForm.querySelector(
+      "#assignmentPriorityInput"
+    ).value;
+    switch (selectedPriorityValue) {
+      case "Unknown":
+        selectedPriority = 0;
+        break;
+      case "Low Priority":
+        selectedPriority = 1;
+        break;
+      case "Neutral":
+        selectedPriority = 2;
+        break;
+      case "High Priority":
+        selectedPriority = 3;
+        break;
+      case "Critical":
+        selectedPriority = 4;
+        break;
+      default:
+        break;
+    }
+    //STATUS
+    const selectedStatusValue = createAssignmentForm.querySelector(
+      "#assignmentStatusInput"
+    ).value;
+    switch (selectedStatusValue) {
+      case "Pending":
+        selectedStatus = 0;
+        break;
+      case "In Process":
+        selectedStatus = 1;
+        break;
+      case "Completed":
+        selectedStatus = 2;
+        break;
+      case "Canceled":
+        selectedStatus = 3;
+        break;
+      default:
+        break;
+    }
 
-  for (let i = 0; i < list.length; i++) {
-    const liElement = document.createElement("li");
-    liElement.classList.add(
-      "list-group-item",
-      "list-group-item-secondary",
-      "d-flex",
-      "justify-content-between",
-      "align-items-center"
-    );
-    const dueDate = new Date(list[i].dueDate);
-    const timeDifference = dueDate - currentDate;
-    const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const assignmentDueDate = createAssignmentForm.querySelector(
+      "#assignmentDueDateInput"
+    ).value;
+    assignmentDueDate = new Date().getDate();
 
-    const progressBar = document.createElement("progress");
-    progressBar.style.width = "60%";
-    progressBar.classList.add(
-      "progress",
-      "progress-bar",
-      "progress-bar-striped",
-      "bg-success"
-    );
-    progressBar.value = remainingDays; // Set the progress value
-    progressBar.max = 200; // Set the maximum progress value
+    // Extract form values
+    const assignmentData = {
+      id: 0,
+      title: createAssignmentForm.querySelector("#assignmentTitleInput").value,
+      description: createAssignmentForm.querySelector(
+        "#assignmentDescriptionInput"
+      ).value,
+      dueDate: assignmentDueDate,
+      priority: selectedPriority,
+      status: selectedStatus,
+      projectId: parseInt(
+        createAssignmentForm.querySelector("#assignmentProjectIdInput").value
+      ),
+    };
 
-    liElement.innerText = `Remaining Days: ${remainingDays.toString()}`;
-    liElement.appendChild(progressBar);
-    entityList.appendChild(liElement);
-  }
-}
+    // Make a POST request to your API
+    try {
+      const response = await fetch(`https://localhost:7001/api/Assignment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(assignmentData),
+      });
 
-//Calculate remaining days of assignments and projects
-function FetchRemainingDays(path, targetElementId) {
-  fetch(`${root}${path}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      ShowRemainingDays(data, targetElementId);
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+      if (response.ok) {
+        // Assignment created successfully
+        // You can handle the response here
+        console.log("Assignment created successfully!");
+      } else {
+        // Handle error response
+        console.error("Error:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+
+  //DELETE ASSIGNMENT
+  // Define the URL of your delete endpoint
+  // Add an event listener to the "Delete" button
+  const deleteAssignmentButton = document.getElementById(
+    "deleteAssignmentButton"
+  );
+  deleteAssignmentButton.addEventListener("click", (e) => {
+    // Controls if there are any clicked assignments to delete
+    if (checkedCheckboxIds.length === 0) {
+      console.error("No assignments has been selected to be removed.");
+      return;
+    } else {
+      RemoveAssignment(checkedCheckboxIds);
+    }
+    // Get the first assignment ID from the array
+
+    // Send a REMOVE/DELETE request
+    function RemoveAssignment(removedAssignmentlist) {
+      removedAssignmentlist = checkedCheckboxIds;
+
+      for (let i = 0; i < checkedCheckboxIds.length; i++) {
+        assignmentId = removedAssignmentlist[i];
+        // Define the URL of your delete endpoint
+        const deleteEndpoint = `https://localhost:7001/api/Assignment/api/removeAssignment?id=${assignmentId}`;
+        fetch(deleteEndpoint, {
+          method: "DELETE",
+          headers: { accept: "*/*" },
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Assignment deleted successfully.");
+            } else {
+              console.error(
+                "Error deleting assignment:",
+                response.status,
+                response.statusText
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    }
+    this.location.reload();
+  });
+});
