@@ -191,7 +191,7 @@ function FetchAssignment(targetElementId) {
           item.status,
           item.projectId,
           [],
-          [],
+          []
         );
 
         for (let j = 0; j < assignmentUsersData.length; j++) {
@@ -244,10 +244,7 @@ function SelectRowAllProperty(checkbox) {
   const selectedRow = checkbox.closest("tr");
   const checkedAssignmentIdValue =
     selectedRow.querySelector("td:first-child").textContent;
-
-
-  };
-
+}
 
 function displayAssignment(assignments, targetElementId) {
   try {
@@ -267,7 +264,12 @@ function displayAssignment(assignments, targetElementId) {
 
       const tdUpdateButton = document.createElement("btn");
       const updateIcon = document.createElement("i");
-      updateIcon.classList.add("btn","fa-regular", "fa-pen-to-square", "fa-lg");
+      updateIcon.classList.add(
+        "btn",
+        "fa-regular",
+        "fa-pen-to-square",
+        "fa-lg"
+      );
 
       tdUpdateButton.appendChild(updateIcon);
       tdUpdate.appendChild(tdUpdateButton);
@@ -322,7 +324,7 @@ function ShowRemainingDays(assignment) {
   const progressBar = document.createElement("progress");
   progressBar.style.width = "100%";
   progressBar.classList.add("progress", "progress-bar", "bg-success");
-  progressBar.style.backgroundColor="#56799c";
+  progressBar.style.backgroundColor = "#56799c";
   progressBar.value = remainingDays; // Set the progress value
   progressBar.max = 200; // Set the maximum progress value
 
@@ -474,46 +476,51 @@ document.addEventListener("DOMContentLoaded", function () {
     this.location.reload();
   });
 
-  //DELETE CHECKED ASSIGNMENTS
+  //DELETE SELECTED ELEMENTS
   const deleteAssignmentButton = document.getElementById(
     "deleteAssignmentButton"
   );
-  deleteAssignmentButton.addEventListener("click", (e) => {
-    // Controls if there are any clicked assignments to delete
-    if (checkedCheckboxIds.length === 0) {
-      console.error("No assignments has been selected to be removed.");
-      return;
-    } else {
-      RemoveAssignment(checkedCheckboxIds);
-    }
-  });
 
-  // Send a REMOVE/DELETE request
-  function RemoveAssignment(removedAssignmentlist) {
-    removedAssignmentlist = checkedCheckboxIds;
-    for (let i = 0; i < checkedCheckboxIds.length; i++) {
-      assignmentId = removedAssignmentlist[i];
-      // Define the URL of your delete endpoint
+  deleteAssignmentButton.addEventListener("click", (e) => {
+    if (checkedCheckboxIds.length === 0) {
+      console.error("No assignments have been selected to be removed.");
+      return;
+    }
+
+    function deleteAssignment(assignmentId) {
       const deleteEndpoint = `https://localhost:7001/api/Assignment/api/removeAssignment?id=${assignmentId}`;
-      fetch(deleteEndpoint, {
+      return fetch(deleteEndpoint, {
         method: "DELETE",
         headers: { accept: "*/*" },
-      })
-        .then((response) => {
-          if (response.ok) {
-            console.log("Assignment deleted successfully.");
-          } else {
-            console.error(
-              "Error deleting assignment:",
-              response.status,
-              response.statusText
-            );
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      this.location.reload();
+      }).then((response) => {
+        if (response.ok) {
+          console.log(
+            `Assignment with ID ${assignmentId} deleted successfully.`
+          );
+        } else {
+          console.error(
+            `Error deleting assignment with ID ${assignmentId}: ${response.status} ${response.statusText}`
+          );
+        }
+      });
     }
-  }
+
+    // Use a recursive function to delete assignments one by one
+    function deleteAssignmentsSequentially(index) {
+      if (index >= checkedCheckboxIds.length) {
+        // All assignments have been deleted, reload the page
+        location.reload();
+        return;
+      }
+
+      const assignmentId = checkedCheckboxIds[index];
+      deleteAssignment(assignmentId).then(() => {
+        // Move on to the next assignment
+        deleteAssignmentsSequentially(index + 1);
+      });
+    }
+
+    // Start deleting assignments sequentially, starting from index 0
+    deleteAssignmentsSequentially(0);
+  });
 });
