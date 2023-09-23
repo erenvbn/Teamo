@@ -191,7 +191,7 @@ function FetchAssignment(targetElementId) {
           item.status,
           item.projectId,
           [],
-          []
+          [],
         );
 
         for (let j = 0; j < assignmentUsersData.length; j++) {
@@ -239,6 +239,16 @@ function SelectRowProperty(checkbox) {
   }
 }
 
+// Define SelectRowProperty at the global scope
+function SelectRowAllProperty(checkbox) {
+  const selectedRow = checkbox.closest("tr");
+  const checkedAssignmentIdValue =
+    selectedRow.querySelector("td:first-child").textContent;
+
+
+  };
+
+
 function displayAssignment(assignments, targetElementId) {
   try {
     assignments.forEach((assignment) => {
@@ -250,11 +260,22 @@ function displayAssignment(assignments, targetElementId) {
       const tdTitle = document.createElement("td");
       const tdAssigneesId = document.createElement("td");
       const tdAssigneesName = document.createElement("td");
+      const tdPriority = document.createElement("td");
+      const tdStatus = document.createElement("td");
       const tdSelection = document.createElement("td");
+      const tdUpdate = document.createElement("td");
+
+      const tdUpdateButton = document.createElement("btn");
+      const updateIcon = document.createElement("i");
+      updateIcon.classList.add("btn","fa-regular", "fa-pen-to-square", "fa-lg");
+
+      tdUpdateButton.appendChild(updateIcon);
+      tdUpdate.appendChild(tdUpdateButton);
 
       //Creating a Checkbox
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
+      checkbox.classList.add("form-check-input", "bg-dark", "text-light");
       checkbox.addEventListener("change", (e) => {
         if (e.target.type == "checkbox") {
           e.preventDefault();
@@ -266,6 +287,8 @@ function displayAssignment(assignments, targetElementId) {
       tdTitle.textContent = assignment.title;
       tdAssigneesId.textContent = assignment.userIds;
       tdAssigneesName.textContent = assignment.userNames;
+      tdPriority.textContent = assignment.priority;
+      tdStatus.textContent = assignment.status;
 
       // Call ShowRemainingDays to get the td element with the progress bar
       //This method returns a tdElement with progressbar
@@ -276,8 +299,11 @@ function displayAssignment(assignments, targetElementId) {
       tr.appendChild(tdTitle);
       tr.appendChild(tdAssigneesId);
       tr.appendChild(tdAssigneesName);
+      tr.appendChild(tdPriority);
+      tr.appendChild(tdStatus);
       tr.appendChild(tdRemainingDay); // Append the progress bar td to the row
       tr.appendChild(tdSelection);
+      tr.appendChild(tdUpdate);
     });
   } catch (error) {
     console.log(error);
@@ -296,6 +322,7 @@ function ShowRemainingDays(assignment) {
   const progressBar = document.createElement("progress");
   progressBar.style.width = "100%";
   progressBar.classList.add("progress", "progress-bar", "bg-success");
+  progressBar.style.backgroundColor="#56799c";
   progressBar.value = remainingDays; // Set the progress value
   progressBar.max = 200; // Set the maximum progress value
 
@@ -385,25 +412,45 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
     }
 
-    const assignmentDueDate = createAssignmentForm.querySelector(
+    //DUE DATE FORMATTER
+    let assignmentDueDate = createAssignmentForm.querySelector(
       "#assignmentDueDateInput"
     ).value;
-    assignmentDueDate = new Date().getDate();
+    console.log(assignmentDueDate);
 
-    // Extract form values
+    // const [month, day, year] = assignmentDueDate.split("/");
+
+    // assignmentDueDate = `${year}-${month}-${day}`;
+    // //console.log(assignmentDueDate);
+
+    // const isoDueDate = new Date(
+    //   assignmentDueDate + "T00:00:00.000Z"
+    // ).toISOString();
+
+    const isoDueDate = new Date(
+      assignmentDueDate + "T00:00:00.000Z"
+    ).toISOString();
+    console.log(isoDueDate);
+
+    //Project Id-Name Formatter
+    let [projectId, projectName] = createAssignmentForm
+      .querySelector("#assignmentProjectIdInput")
+      .value.split("-");
+    console.log(projectId);
+
+    // Project form values into an anonymous object
     const assignmentData = {
       id: 0,
       title: createAssignmentForm.querySelector("#assignmentTitleInput").value,
       description: createAssignmentForm.querySelector(
         "#assignmentDescriptionInput"
       ).value,
-      dueDate: assignmentDueDate,
+      dueDate: isoDueDate,
       priority: selectedPriority,
       status: selectedStatus,
-      projectId: parseInt(
-        createAssignmentForm.querySelector("#assignmentProjectIdInput").value
-      ),
+      projectId: projectId,
     };
+    console.log(assignmentData);
 
     // Make a POST request to your API
     try {
@@ -424,11 +471,10 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (error) {
       console.error("Error:", error);
     }
+    this.location.reload();
   });
 
-  //DELETE ASSIGNMENT
-  // Define the URL of your delete endpoint
-  // Add an event listener to the "Delete" button
+  //DELETE CHECKED ASSIGNMENTS
   const deleteAssignmentButton = document.getElementById(
     "deleteAssignmentButton"
   );
@@ -440,36 +486,34 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       RemoveAssignment(checkedCheckboxIds);
     }
-    // Get the first assignment ID from the array
-
-    // Send a REMOVE/DELETE request
-    function RemoveAssignment(removedAssignmentlist) {
-      removedAssignmentlist = checkedCheckboxIds;
-
-      for (let i = 0; i < checkedCheckboxIds.length; i++) {
-        assignmentId = removedAssignmentlist[i];
-        // Define the URL of your delete endpoint
-        const deleteEndpoint = `https://localhost:7001/api/Assignment/api/removeAssignment?id=${assignmentId}`;
-        fetch(deleteEndpoint, {
-          method: "DELETE",
-          headers: { accept: "*/*" },
-        })
-          .then((response) => {
-            if (response.ok) {
-              console.log("Assignment deleted successfully.");
-            } else {
-              console.error(
-                "Error deleting assignment:",
-                response.status,
-                response.statusText
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-    }
-    this.location.reload();
   });
+
+  // Send a REMOVE/DELETE request
+  function RemoveAssignment(removedAssignmentlist) {
+    removedAssignmentlist = checkedCheckboxIds;
+    for (let i = 0; i < checkedCheckboxIds.length; i++) {
+      assignmentId = removedAssignmentlist[i];
+      // Define the URL of your delete endpoint
+      const deleteEndpoint = `https://localhost:7001/api/Assignment/api/removeAssignment?id=${assignmentId}`;
+      fetch(deleteEndpoint, {
+        method: "DELETE",
+        headers: { accept: "*/*" },
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Assignment deleted successfully.");
+          } else {
+            console.error(
+              "Error deleting assignment:",
+              response.status,
+              response.statusText
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      this.location.reload();
+    }
+  }
 });

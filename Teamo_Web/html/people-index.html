@@ -3,30 +3,41 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
-    <meta name="description" content="" />
+    <title>TeamO - Task Management</title>
+    <meta name="description" content="Task management web app" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/js/index.js"></script>
-    <div id="navbarHeader">Eren</div>
-  </head>
-
+    <div id="navbarHeader"></div>
+</head>
   <body>
-    <div class="row">
-      <div class="col-lg-4">
-        <ul id="PeopleList" class="list-group">People</ul>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="alert bg-dark">
+            <h4 class="alert-heading">Under Construction</h4>
+            <hr>
+            <p>This page is currently under construction. We apologize for any inconvenience.</p>
+            <p class="mb-0">Please check back later for updates.</p>
+            <hr>
+            <div class="row col-12">
+              <div class="text-end col-6">
+                <i class="fa-solid fa-person-digging fa-flip fa-3x" style="color:orange"></i>
+              </div>
+              <div class="text-start col-6">
+                <i class="fa-solid fa-person-digging fa-flip fa-3x " style="color:orange"></i>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-    <!-- JavaScript block to fetch data when the page loads -->
-    <script>  
-      // Call FetchSingleProperty for EntityList3
-      FetchSingleProperty('/User', 'name', 'PeopleList');
-    </script>
   </body>
-
   <footer>
     <div id="navbarFooter"></div>
   </footer>

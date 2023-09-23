@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/js/index.js"></script>
+    <div id="navbarHeader">Eren</div>
+  </head>
+
+  <body>
+    <div class="container mt-5 rounded-5">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">Projects</h5>
+              <ul class="list-group" id="ProjectList">
+                <!-- Project items will be dynamically added here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 text-center">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Assignments</h5>
+              <ul class="list-group" id="AssignmentList">
+                <!-- Assignment items will be dynamically added here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 text-center">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">People</h5>
+              <ul class="list-group" id="PeopleList">
+                <!-- People items will be dynamically added here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- JavaScript block to fetch data when the page loads -->
+    <script>
+      FetchSingleProperty('/Project', 'name', 'ProjectList');
+      FetchSingleProperty('/Assignment', 'title', 'AssignmentList');
+      FetchSingleProperty('/User', 'name', 'PeopleList');
+    </script>
+  </body>
+  
+
+  <footer>
+    <div id="navbarFooter"></div>
+  </footer>
+
+  <script>
+    $(document).ready(function () {
+      $("#navbarHeader").load("header-partial.html");
+      $("#navbarFooter").load("footer-partial.html");
+    });
+  </script>
+</html>

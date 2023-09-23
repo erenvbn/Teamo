@@ -1,47 +1,86 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
-    <meta name="description" content="" />
+    <title>TeamO - Task Management</title>
+    <meta name="description" content="Task management web app" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Include jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/js/index.js"></script>
-    <div id="navbarHeader">Eren</div>
-  </head>
+    <div id="navbarHeader"></div>
+</head>
 
-  <body>
-    <div class="row">
-      <div class="col-lg-4">
-        <ul id="ProjectList" class="list-group">Projects</ul>
-      </div>
-      <div class="col-lg-4">
-        <ul id="AssignmentList" class="list-group">Assignments</ul>
-      </div>
-      <div class="col-lg-4">
-        <ul id="PeopleList" class="list-group">People</ul>
-      </div>
+<body>
+    <div class="hero bg-primary text-white text-center mt-5 py-5">
+        <div class="container">
+            <h1 class="display-5">Welcome to TeamO</h1>
+            <p class="text-light display-6">360° Excellence Awaits </p>
+            <a href="/html/dashboard.html" class="btn btn-lg btn-success btn-animation-orange">Go to Admin Demo Panel</a>
+        </div>
     </div>
-  
-    <!-- JavaScript block to fetch data when the page loads -->
-    <script>
-      FetchSingleProperty('/Project', 'name', 'ProjectList');
-      FetchSingleProperty('/Assignment', 'title', 'AssignmentList');
-      FetchSingleProperty('/User', 'name', 'PeopleList');
-    </script>
-  </body>
 
-  <footer>
+    <!-- Features Section -->
+    <div class="features py-lg-5 text-center mt-3 mb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div>
+                        <i class="fas fa-tasks fa-4x"></i>
+                    </div>
+                    <h3>Task Management</h3>
+                    <p>Efficiently manage tasks and projects with TeamO.</p>
+                </div>
+                <div class="col-lg-3">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bars-progress fa-4x"></i>
+                    </div>
+                    <h3>Progress</h3>
+                    <p>Render your advancements through TeamO.</p>
+                </div>
+                <div class="col-lg-3">
+                    <div>
+                        <i class="fas fa-calendar-check fa-4x"></i>
+                    </div>
+                    <h3>Sync</h3>
+                    <p>Schedule and track your tasks on the calendar.</p>
+                </div>
+                <div class="col-lg-3">
+                    <div>
+                        <i class="fa-solid fa-users-gear fa-4x"></i>
+                    </div>
+                    <h3>Collaborate</h3>
+                    <p>Work together seamlessly with your team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5 text-center">
+        <div class="container">
+            <h2>Ready to boost your productivity?</h2>
+            <p>Join TeamO today and take control of your tasks.</p>
+            <a href="contact.html" class="btn btn-primary btn-lg btn-animation-orange">Pre-Register</a>
+        </div>
+    </div>
+</body>
+<footer>
     <div id="navbarFooter"></div>
-  </footer>
+</footer>
 
-  <script>
+<!-- SCRIPT FOR PRELOADED ELEMENTS -->
+<script>
     $(document).ready(function () {
-      $("#navbarHeader").load("header-partial.html");
-      $("#navbarFooter").load("footer-partial.html");
+        $("#navbarHeader").load("header-partial-login.html");
+        $("#navbarFooter").load("footer-partial.html");
     });
-  </script>
+</script>
+
 </html>

@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Include jQuery UI -->
     <link
@@ -21,14 +25,23 @@
 
   <body>
     <div class="flex-row row col-12 justify-content-between">
-      <div class="d-grid gap-2 row m-3 col-6">
-        <!-- Adjusted column size -->
-        <button id="flip" class="btn bg-feedback-success" type="button">
+      <div class="d-grid gap-2 row m-3 col-5">
+        <button
+          id="flip"
+          class="btn bg-feedback-success btn-animation-green"
+          type="button"
+        >
           Create Assignment(✚)
         </button>
       </div>
       <div class="d-grid gap-2 row m-3 col-2">
-        <button id="deleteAssignmentButton" type="submit" class="btn bg-feedback-error">Delete</button>
+        <button
+          id="deleteAssignmentButton"
+          type="submit"
+          class="btn bg-feedback-error btn-animation-red"
+        >
+          Delete
+        </button>
       </div>
     </div>
     <div>
@@ -37,7 +50,6 @@
         <div id="panel">
           <form
             id="createAssignmentForm"
-            action=""
             method="post"
             class="d-grid gap-2 row m-3 col-6"
           >
@@ -125,9 +137,12 @@
               <th scope="col" class="col-1">Id</th>
               <th scope="col" class="col-3">Assignment Title</th>
               <th scope="col" class="col-1">Assignee Ids</th>
-              <th scope="col" class="col-2">Assignees</th>
+              <th scope="col" class="col-1">Assignees</th>
+              <th scope="col" class="col-0">Priority</th>
+              <th scope="col" class="col-0">Status</th>
               <th scope="col" class="col-2">Remaining Days</th>
-              <th scope="col" class="col-1">Selected</th>
+              <th scope="col" class="col-0">Selected</th>
+              <th scope="col" class="col-0">Edit</th>
               <!-- Adjusted column size -->
             </tr>
           </thead>
@@ -137,8 +152,6 @@
         </table>
       </div>
     </div>
-    <p id="JsonParagraph">asdasd</p>
-    <!-- JavaScript block to fetch data when the page loads -->
   </body>
 
   <footer>
@@ -154,13 +167,6 @@
   </script>
 
   <script>
-    // Call FetchSingleProperty for EntityList2
-    // FetchSingleProperty("/Assignment", "title", "AssignmentList");
-    // FetchSingleProperty("/Assignment", "id", "AssignmentId");
-    // FetchSingleProperty("/AssignmentUser", "userId", "Assignees");
-    // FetchSingleProperty("/AssignmentUser", "assignmentId", "AssignmentIds");
-    //FetchRemainingDays("/Assignment", "tbodyAssignment");
-    //FetchJSON("/Assignment");
     FetchAndLoadProperty("/Project", "id", "name", "assignmentProjectIdInput");
     FetchAssignment("tbodyAssignment");
   </script>
@@ -172,7 +178,6 @@
       $("#flip").click(function () {
         $("#panel").slideToggle("slow");
         count++;
-        console.log(count);
         if (count % 2 != 0) {
           $("#flip").css("color", "gray");
           $("#flip").toggleClass("bg-feedback-success");
@@ -184,6 +189,15 @@
           $("#flip").css("background-color", "var(--feedback-success)");
         }
       });
+      // Add hover effect
+      $("#flip").hover(
+        function () {
+          $(this).css("transform", "scale(1.1)");
+        },
+        function () {
+          $(this).css("transform", "scale(1.0)");
+        }
+      );
     });
   </script>
 
