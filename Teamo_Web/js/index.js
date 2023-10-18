@@ -420,15 +420,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ).value;
     console.log(assignmentDueDate);
 
-    // const [month, day, year] = assignmentDueDate.split("/");
-
-    // assignmentDueDate = `${year}-${month}-${day}`;
-    // //console.log(assignmentDueDate);
-
-    // const isoDueDate = new Date(
-    //   assignmentDueDate + "T00:00:00.000Z"
-    // ).toISOString();
-
     const isoDueDate = new Date(
       assignmentDueDate + "T00:00:00.000Z"
     ).toISOString();
