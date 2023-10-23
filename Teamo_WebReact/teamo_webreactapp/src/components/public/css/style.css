@@ -1,0 +1,99 @@
+/* Change the background color of the progress bar */
+progress {
+  background-color: #007bff; /* Set the desired fill color for WebKit browsers (e.g., Chrome) */
+}
+
+/* Change the color of the progress bar fill */
+progress::-webkit-progress-value {
+  background-color: #19c37d;
+}
+
+.progress {
+  background-color: red !important;
+}
+:root {
+  /* Primary Colors */
+  --primary-bg: #b3d4e0; /* Paler main background color */
+  --primary-text: #ffffff; /* Main text color */
+
+  /* Secondary Colors */
+  --secondary-bg: #f0f2f4; /* Paler secondary background color */
+  --secondary-text: #5e748d; /* Paler secondary text color */
+
+  /* Accent Colors */
+  --accent-green:  #91e39c; /* Paler green for success or positive actions */
+  --accent-yellow: #f8e89b; /* Paler yellow for warnings or alerts */
+  --accent-red: #e39d91; /* Paler red for errors or critical actions */
+  --accent-blue: #85c9e9; /* Paler blue for links or highlights */
+
+  /* Additional Colors */
+  --neutral-gray: #d4dde6; /* Paler neutral gray for borders or separators */
+  --neutral-light-gray: #e9ebef; /* Paler light gray for backgrounds or inactive elements */
+  --neutral-dark-gray: #8999a8; /* Paler dark gray for headings or icons */
+
+  /* Feedback Colors */
+  --feedback-success: #91e39c; /* Paler success feedback */
+  --feedback-warning: #f8e89b; /* Paler warning feedback */
+  --feedback-error: #e39d91; /* Paler error feedback */
+  --feedback-info: #85c9e9; /* Paler info feedback */
+
+  /* Status Colors */
+  --status-open: #91e39c; /* Paler status for open tasks or items */
+  --status-in-progress: #ffc679; /* Paler status for in-progress tasks or items */
+  --status-done: #9acce9; /* Paler status for completed tasks or items */
+}
+
+.bg-main {
+  background-color: var(--primary-bg);
+}
+
+.bg-accent-green {
+  background-color: var(--accent-green);
+}
+
+.bg-accent-neutral-gray {
+  background-color: var(--neutral-gray);
+}
+
+.bg-accent-red {
+  background-color: var(--accent-red);
+}
+
+.bg-feedback-success {
+  background-color: var(--feedback-success);
+}
+
+.bg-feedback-error {
+  background-color: var(--feedback-error);
+}
+
+#flip {
+  background-color: var(--feedback-success);
+}
+
+.btn-animation-orange {
+  transition: transform 0.2s;
+}
+
+.btn-animation-green {
+  transition: transform 0.2s;
+}
+.btn-animation-red {
+  transition: transform 0.2s;
+}
+
+.btn-animation-orange:hover {
+  transform: scale(1.1);
+  background-color: orange;
+}
+
+.btn-animation-green:hover {
+  transform: scale(1.05);
+  background-color: rgb(10, 211, 167);
+  color: black;
+}
+.btn-animation-red:hover {
+  transform: scale(1.1);
+  background-color: rgb(138, 0, 0);
+  color: white;
+}
