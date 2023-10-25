@@ -7,6 +7,7 @@ function MainProjectLayout(props) {
 
   const handleSelectedProject = (projectId) => {
     setSelectedProject(projectId);
+    console.log(projectId);
   }
 
   return (

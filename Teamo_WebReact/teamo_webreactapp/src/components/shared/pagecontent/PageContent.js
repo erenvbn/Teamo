@@ -3,8 +3,10 @@ import apiService from "../../../services/apiService";
 import apiConfig from "../../../config/apiconfig";
 import PageContentHeader from "./PageContentHeader";
 import Assignment from "../../assignment/Assignment";
+import { useContext } from "react";
 
 function PageContent({ selectedProjectId }) {
+  const [isProjectSelected, selectProject] = useState(true);
   const [projectId, setProjectId] = useState(1);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -38,29 +40,35 @@ function PageContent({ selectedProjectId }) {
       });
   }, [projectId]);
 
-  return (
-    <div>
-      <PageContentHeader
-        projectId={projectId}
-        projectName={projectName}
-        projectDescription={projectDescription}
-      />
-      <div className="container border border-1">
-        <div>
-          {assignments.map((assignment) => (
-            <Assignment
-              key={assignment.id}
-              title={assignment.title}
-              description={assignment.description}
-              dueDate={assignment.dueDate}
-              priority={assignment.priority}
-              status={assignment.status}
-            />
-          ))}
+  if (isProjectSelected) {
+    return (
+      <div>
+        <PageContentHeader
+          projectId={projectId}
+          projectName={projectName}
+          projectDescription={projectDescription}
+        />
+        <div className="container">
+          <div>
+            {assignments.map((assignment) => (
+              <Assignment
+                key={assignment.id}
+                title={assignment.title}
+                description={assignment.description}
+                dueDate={assignment.dueDate}
+                priority={assignment.priority}
+                status={assignment.status}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    <div>
+      <h1>Select a Project!</h1>
+    </div>;
+  }
 }
 
 export default PageContent;

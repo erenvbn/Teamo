@@ -1,9 +1,9 @@
 import * as React from "react";
-import apiConfig from "./config/apiconfig";
-import apiService from "./services/apiService";
+import "bootstrap/dist/css/bootstrap.css";
 import "./components/public/css/bootstrap.css";
 import "./components/public/css/style.css";
 import { createRoot } from "react-dom/client";
+import reactstrap from "reactstrap";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -15,6 +15,7 @@ import AboutLayout from "./components/about/AboutLayout";
 import ContactLayout from "./components/contact/ContactLayout";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import ProjectLayout from "./components/project/ProjectLayout";
+import { ProjectContext } from "./store/projectContext";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +48,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/projectlayout",
-    element: <ProjectLayout></ProjectLayout>,
+    element: (
+      //Wrapping ProjectLayout root with ProjectContext.Provider
+      //To share the values in ProjectContext
+      <ProjectContext.Provider value={{ selectedProjectId: 1 }}>
+        <div>
+          <ProjectLayout />,
+        </div>
+      </ProjectContext.Provider>
+    ),
   },
 ]);
 

@@ -16,6 +16,7 @@ const apiConfig = {
     getProjects: `${apiBaseUrl}Project`,
     getUsers: `${apiBaseUrl}User`,
     getComments: `${apiBaseUrl}Comment`,
+    postProject: `${apiBaseUrl}Project`
 }
 
 export default apiConfig;

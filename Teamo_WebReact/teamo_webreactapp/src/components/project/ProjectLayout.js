@@ -6,11 +6,9 @@ import Sidebar from "../shared/sidebar/Sidebar";
 function ProjectLayout() {
   return (
     <div>
-      <NavbarHeaderLogin></NavbarHeaderLogin>
-      <MainProjectLayout>
-        {/* This cannot be rendered, alttaki */}
-      </MainProjectLayout>
-      <NavbarFooter></NavbarFooter>
+      <NavbarHeaderLogin />
+      <MainProjectLayout />
+      <NavbarFooter />
     </div>
   );
 }

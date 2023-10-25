@@ -1,69 +1,40 @@
-// import React from "react";
-
-// function PageContentHeader() {
-//   return (
-//     <div className="container row">
-//       <div className="col">
-//         <h1 className="fs-5 text-dark fw-bold"><span>
-//             <i class="fa-solid fa-diagram-project me-2"></i>
-//             </span>Database Project</h1>
-//         <span className="fs-5 text-dark fw-lighter">
-//           A project to design and implement a database system
-//         </span>
-//       </div>
-//       <div className="col d-flex justify-content-end align-items-center">
-//         <i class="fa-solid fa-circle-user fa-3x me-2"></i>
-//         <i class="fa-solid fa-circle-user fa-3x"></i>
-//         <i class="fa-solid fa-circle-user fa-3x"></i>
-//         <button className="btn btn-primary mx-2">Create</button>
-//         <button className="btn btn-primary mx-2">Share</button>
-//         <button className="btn btn-secondary mx-2">Filter</button>
-//       </div>
-//       <div>
-//         <hr className="m-3"></hr>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default PageContentHeader;
-
-
-
-
-
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function PageContentHeader({
-  projectId,
-  projectName,
-  projectDescription,
-}) {
+function PageContentHeader({ projectId, projectName, projectDescription }) {
   return (
-    <div className="container row">
-      <div className="col">
-        <h1 className="fs-5 text-dark fw-bold">
-          <span>
-            <i class="fa-solid fa-diagram-project me-2"></i>
-          </span>
-          {projectName}
-          <span>
-            <i class="fa-solid fa-diagram-project me-2"></i>
-          </span>
-          {projectId}
-        </h1>
-        <span className="fs-5 text-dark fw-lighter">{projectDescription}</span>
+    <div className="container mt-4">
+      <div className="d-flex flex-row justify-content-between">
+        <div className="col-12 justify-content-around d-flex">
+
+          <div className="col-6 align-items-lg-baseline">
+            <h3>
+              Project ID: #{projectId}
+            </h3>
+            <h3 className="text-dark">
+              <i className="bi bi-diagram-project"></i>
+              Project Name: {projectName}
+            </h3>
+          </div>
+
+          <div className="d-flex flex-column align-items-end">
+            <h5 className="text-dark">{projectDescription}</h5>
+            <div >
+              <i className="fa-regular fa-circle-user "></i>
+              <i className="fa-regular fa-circle-user"></i>
+              <i className="fa-regular fa-circle-user"></i>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div className="col d-flex justify-content-end align-items-center">
-        <i class="fa-solid fa-circle-user fa-3x me-2"></i>
-        <i class="fa-solid fa-circle-user fa-3x"></i>
-        <i class="fa-solid fa-circle-user fa-3x"></i>
-        <button className="btn btn-primary mx-2">Create</button>
-        <button className="btn btn-primary mx-2">Share</button>
-        <button className="btn btn-secondary mx-2">Filter</button>
-      </div>
-      <div>
-        <hr className="m-3"></hr>
+      <hr className="mt-1" />
+
+      <div className="col-md-12 d-flex justify-content-between btn-outline-light ">
+        <button className="btn">Summary</button>
+        <button className="btn">Assignments</button>
+        <button className="btn">Board</button>
+        <button className="btn">People</button>
       </div>
     </div>
   );
