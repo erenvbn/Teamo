@@ -8,6 +8,7 @@ import { Button } from "reactstrap";
 import ProjectSummary from "../../project/ProjectSummary";
 import ProjectPeople from "../../project/ProjectPeople";
 import ProjectBoard from "../../project/ProjectBoard";
+import CreateAssignmentModal from "../../modal/CreateAssignmentModal";
 
 function PageContent() {
   // Project Properties
@@ -15,34 +16,13 @@ function PageContent() {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [assignments, setAssignments] = useState([]);
-
   // Change Selected Tabs
-  const [selectedProjectTab, setSelectedProjectTab] = useState("Assignment");
-
+  const [selectedProjectTab, setSelectedProjectTab] = useState("Summary");
   const onTabClick = (tabText) => {
     setSelectedProjectTab(tabText);
   };
-
   // Use local state to store selectedProjectId
-  const { selectedProjectId } = useContext(ProjectContext);
-
-  // Fetch project data based on the selectedProjectId
-  useEffect(() => {
-    if (selectedProjectId !== null) {
-      apiService
-        .get(apiConfig.getProjects + `/${selectedProjectId}`)
-        .then((res) => {
-          const selectedProject = res.data;
-          setProjectId(selectedProject.id);
-          setProjectName(selectedProject.name);
-          setProjectDescription(selectedProject.description);
-          console.log("PageContent:" + selectedProjectId);
-        })
-        .catch((error) => {
-          console.error("Error fetching project data: ", error);
-        });
-    }
-  }, [selectedProjectId]);
+  const { selectedProjectId, selectedProjectData } = useContext(ProjectContext);
 
   // Fetch Assignment of the Selected Project
   useEffect(() => {
@@ -61,6 +41,15 @@ function PageContent() {
         });
     }
   }, [selectedProjectId]);
+
+
+
+
+
+
+
+
+
 
   return (
     <div>
@@ -114,6 +103,11 @@ function PageContent() {
           )}
           {selectedProjectTab === "Assignments" && (
             <div className="container">
+              <div className="d-flex flex-row justify-content-end gap-1">
+                <div className="d-flex btn-group mb-2 justify-content-evenly ">
+                  <CreateAssignmentModal></CreateAssignmentModal>
+                </div>
+              </div>
               {assignments.map((assignment) => (
                 <Assignment
                   key={assignment.id}

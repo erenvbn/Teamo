@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Progress } from "reactstrap";
+import { Progress, Button } from "reactstrap";
 
 function Assignment({ title, description, dueDate, priority, status }) {
   const [remainingDays, setRemainingDays] = useState(0);
@@ -13,6 +13,7 @@ function Assignment({ title, description, dueDate, priority, status }) {
     const timeDifference = dueDate - new Date();
     const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     setRemainingDays(remainingDays);
+    console.log(remainingDays);
   };
 
   return (
@@ -33,7 +34,7 @@ function Assignment({ title, description, dueDate, priority, status }) {
           <i className="fa-regular fa-circle-user "></i>
         </div>
       </div>
-      <div className="d-flex flex-row justify-content-around">
+      <div className="container d-flex flex-row justify-content-between">
         <Progress
           min={0}
           max={100}
@@ -43,6 +44,14 @@ function Assignment({ title, description, dueDate, priority, status }) {
         >
           {remainingDays} days remaining
         </Progress>
+        <div className="btn-group me-2 mb-2">
+          <Button small className="border-0 btn-info btn-sm">
+            <i class="fa-solid fa-ellipsis"></i>{" "}
+          </Button>
+          <Button className="border-0 btn-danger btn-sm">
+            <i class="fa-solid fa-xmark"></i>{" "}
+          </Button>
+        </div>
       </div>
     </div>
   );

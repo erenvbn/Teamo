@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import ButtonCreateProject from "../button/ButtonCreateProject";
 import apiService from "../../services/apiService";
 import apiConfig from "../../config/apiconfig";
 import axios from "axios";
 import { Alert } from "reactstrap";
+import { ProjectContext } from "../../store/projectContext";
 
 function CreateProjectForm() {
+
   const [projectData, setProjectData] = useState({
     id: 1,
     name: "",
@@ -15,25 +17,20 @@ function CreateProjectForm() {
     endDate: "",
   });
 
-  const [isSuccessAlertVisible, setSuccessAlertVisible]=useState(false)
-  const [isFailureAlertVisible, setFailureAlertVisible]=useState(false)
+  const [isSuccessAlertVisible, setSuccessAlertVisible] = useState(false);
+  const [isFailureAlertVisible, setFailureAlertVisible] = useState(false);
 
   const handleCreateProject = (e) => {
     const { name, value } = e.target;
     setProjectData({ ...projectData, [name]: value });
-    console.log(projectData)
   };
 
   const CreateProject = async () => {
     try {
-      const res = await axios.post(
-        apiService.post(projectData),
-        projectData
-      );
+      const res = apiService.post(apiConfig.postProject, projectData);
       //const res = await apiService.post(apiConfig.postProject, projectData);
       console.log("Project has been created:", res);
       setSuccessAlertVisible(true);
-
     } catch (error) {
       console.error("Error while creating a project:", error);
       setFailureAlertVisible(true);
@@ -97,8 +94,14 @@ function CreateProjectForm() {
           <ButtonCreateProject
             onProjectCreate={CreateProject}
           ></ButtonCreateProject>
-          <Alert isOpen={isSuccessAlertVisible} color="info" > The project has been created successfully</Alert>
-          <Alert isOpen={isFailureAlertVisible} color="red" > The project has been not been created</Alert>
+          <Alert isOpen={isSuccessAlertVisible} color="info">
+            {" "}
+            The project has been created successfully
+          </Alert>
+          <Alert isOpen={isFailureAlertVisible} color="red">
+            {" "}
+            The project has been not been created
+          </Alert>
         </form>
       </div>
     </div>

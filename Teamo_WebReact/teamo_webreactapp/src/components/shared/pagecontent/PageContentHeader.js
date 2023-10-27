@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProjectContext } from "../../../store/projectContext";
 
 function PageContentHeader({ projectId, projectName, projectDescription }) {
-  const selectedProjectId = useContext(ProjectContext).selectedProjectId;
-
+  const { selectedProjectId, selectedProjectData } = useContext(ProjectContext);
   return (
     <div className="container mt-4">
       <div className="d-flex flex-row justify-content-between">
@@ -13,12 +12,12 @@ function PageContentHeader({ projectId, projectName, projectDescription }) {
             <h3>Project ID: #{selectedProjectId}</h3>
             <h3 className="text-dark">
               <i className="bi bi-diagram-project"></i>
-              Project Name: {projectName}
+              Project Name: {selectedProjectData.name}
             </h3>
           </div>
 
           <div className="d-flex flex-column align-items-end">
-            <h5 className="text-dark">{projectDescription}</h5>
+            <h5 className="text-dark">{selectedProjectData.description}</h5>
             <div>
               <i className="fa-regular fa-circle-user "></i>
               <i className="fa-regular fa-circle-user"></i>
