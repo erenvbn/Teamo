@@ -1,4 +1,20 @@
+import React, { useState, useEffect } from "react";
+import { Progress } from "reactstrap";
+
 function Assignment({ title, description, dueDate, priority, status }) {
+  const [remainingDays, setRemainingDays] = useState(0);
+
+  useEffect(() => {
+    calculateRemainingDays(dueDate);
+  }, [dueDate]);
+
+  const calculateRemainingDays = (dueDate) => {
+    dueDate = new Date(dueDate);
+    const timeDifference = dueDate - new Date();
+    const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    setRemainingDays(remainingDays);
+  };
+
   return (
     <div className="card mb-3">
       <div className="d-flex flex-row justify-content-between m-2">
@@ -16,6 +32,17 @@ function Assignment({ title, description, dueDate, priority, status }) {
           <i className="fa-regular fa-circle-user "></i>
           <i className="fa-regular fa-circle-user "></i>
         </div>
+      </div>
+      <div className="d-flex flex-row justify-content-around">
+        <Progress
+          min={0}
+          max={100}
+          color="success" /* Change to "success" for green color */
+          className="my-1 ms-4 w-50 bg-black"
+          value={remainingDays}
+        >
+          {remainingDays} days remaining
+        </Progress>
       </div>
     </div>
   );

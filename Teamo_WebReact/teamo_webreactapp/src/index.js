@@ -15,7 +15,7 @@ import AboutLayout from "./components/about/AboutLayout";
 import ContactLayout from "./components/contact/ContactLayout";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import ProjectLayout from "./components/project/ProjectLayout";
-import { ProjectContext } from "./store/projectContext";
+import { ProjectContext, ProjectContextProvider } from "./store/projectContext";
 
 const router = createBrowserRouter([
   {
@@ -51,11 +51,11 @@ const router = createBrowserRouter([
     element: (
       //Wrapping ProjectLayout root with ProjectContext.Provider
       //To share the values in ProjectContext
-      <ProjectContext.Provider value={{ selectedProjectId: 1 }}>
+      <ProjectContextProvider>
         <div>
-          <ProjectLayout />,
+          <ProjectLayout />
         </div>
-      </ProjectContext.Provider>
+      </ProjectContextProvider>
     ),
   },
 ]);

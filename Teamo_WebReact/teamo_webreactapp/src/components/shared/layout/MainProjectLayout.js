@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from "../sidebar/Sidebar";
 import PageContent from "../pagecontent/PageContent";
+import PageContentAssignment from "../pagecontent/PageContentAssignment";
 
 function MainProjectLayout(props) {
   const [selectedProjectId, setSelectedProject] = useState(1);

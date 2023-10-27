@@ -8,7 +8,7 @@
   --secondary-text: #5e748d; /* Paler secondary text color */
 
   /* Accent Colors */
-  --accent-green:  #91e39c; /* Paler green for success or positive actions */
+  --accent-green: #91e39c; /* Paler green for success or positive actions */
   --accent-yellow: #f8e89b; /* Paler yellow for warnings or alerts */
   --accent-red: #e39d91; /* Paler red for errors or critical actions */
   --accent-blue: #85c9e9; /* Paler blue for links or highlights */
@@ -29,6 +29,13 @@
   --status-open: #91e39c; /* Paler status for open tasks or items */
   --status-in-progress: #ffc679; /* Paler status for in-progress tasks or items */
   --status-done: #9acce9; /* Paler status for completed tasks or items */
+}
+
+/* CHANGING PROGRESS BAR STYLE HERE  */
+.progress {
+  background-color: var(
+    --neutral-gray
+  ) !important; /* This style remains unchanged */
 }
 
 h1 {
@@ -60,19 +67,6 @@ hr {
   border: none; /* Remove the default border */
   border-top: 2px solid var(--secondary-text); /* Use secondary text color for hr */
   margin: 20px 0; /* Add space above and below the hr */
-}
-
-progress {
-  background-color: var(--accent-blue); /* Use the accent-blue color */
-}
-
-/* Change the color of the progress bar fill */
-progress::-webkit-progress-value {
-  background-color: var(--feedback-info); /* Use info feedback color */
-}
-
-.progress {
-  background-color: red !important; /* This style remains unchanged */
 }
 
 .bg-main {

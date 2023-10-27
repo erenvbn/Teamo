@@ -1,18 +1,21 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react"; // Make sure to import 'useState'
 import ButtonCreateProject from "../button/ButtonCreateProject";
 import apiService from "../../services/apiService";
 import apiConfig from "../../config/apiconfig";
 import axios from "axios";
 import { Alert } from "reactstrap";
+import { ProjectContext } from "../../store/projectContext";
 
-function EditProjectForm(selectedProjectData) {
+const EditProjectForm = () => {
+  const selectedProjectId = useContext(ProjectContext).selectedProjectId;
+
+  // Step 1: Add state variable for project data and its state setter
   const [projectData, setProjectData] = useState({
-    id: 1,
-    name: "",
-    description: "",
-    startDate: "",
-    endDate: "",
+    id: 4,
+    name: "Game project",
+    description: "A project to make a simple game using Unity and C#",
+    startDate: "2023-12-01T00:00:00",
+    endDate: "2024-01-01T00:00:00",
   });
 
   const [isSuccessAlertVisible, setSuccessAlertVisible] = useState(false);
@@ -20,42 +23,26 @@ function EditProjectForm(selectedProjectData) {
 
   const handleEditProject = (e) => {
     const { name, value } = e.target;
+
+    // Step 2: Update project data using the state setter
     setProjectData({ ...projectData, [name]: value });
     console.log(projectData);
   };
 
-  const FillProjectDetails = () => {};
-
-  const GetProject = async () => {
-    try {
-      const res = await axios.post(
-        "https://localhost:7001/api/Project",
-        projectData
-      );
-      //const res = await apiService.post(apiConfig.postProject, projectData);
-      console.log("Project has been edited:", res);
-      setSuccessAlertVisible(true);
-    } catch (error) {
-      console.error("Error while creating a project:", error);
-      setFailureAlertVisible(true);
-    }
-  };
-
   const EditProject = async () => {
     try {
-      const res = await axios.post(
-        "https://localhost:7001/api/Project",
+      const res = await axios.put(
+        // Use 'await' since axios returns a promise
+        `https://localhost:7001/api/Project/${selectedProjectId}`,
         projectData
       );
-      //const res = await apiService.post(apiConfig.postProject, projectData);
       console.log("Project has been edited:", res);
       setSuccessAlertVisible(true);
     } catch (error) {
-      console.error("Error while creating a project:", error);
+      console.error("Error while editing a project:", error);
       setFailureAlertVisible(true);
     }
   };
-
   return (
     // <!-- Edit project Form  -->
     <div className="flex-row col-12 justify-content-between">
@@ -74,6 +61,7 @@ function EditProjectForm(selectedProjectData) {
               id="projectName"
               name="name"
               value={projectData.name}
+              placeholder={projectData.name}
               onChange={handleEditProject}
             />
           </div>
@@ -85,28 +73,31 @@ function EditProjectForm(selectedProjectData) {
               name="description"
               value={projectData.description}
               rows="4"
+              placeholder={projectData.description}
               onChange={handleEditProject}
             ></textarea>
           </div>
           <div>
-            <label htmlFor="projectDueDate">Start Date:</label>
+            <label htmlFor="projectStartDate">Start Date:</label>
             <input
               type="date"
               className="form-control"
               id="projectStartDateInput"
               name="startDate"
               value={projectData.startDate}
+              placeholder={projectData.startDate}
               onChange={handleEditProject}
             />
           </div>
           <div>
-            <label htmlFor="projectDueDate">End Date:</label>
+            <label htmlFor="projectEndDate">End Date:</label>
             <input
               type="date"
               className="form-control"
               id="projectEndDateInput"
               name="endDate"
               value={projectData.endDate}
+              placeholder={projectData.endDate}
               onChange={handleEditProject}
             />
           </div>
@@ -125,6 +116,5 @@ function EditProjectForm(selectedProjectData) {
       </div>
     </div>
   );
-}
-
+};
 export default EditProjectForm;

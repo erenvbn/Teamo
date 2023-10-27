@@ -4,10 +4,6 @@ import apiConfig from "../../../config/apiconfig";
 import PageContentHeader from "./PageContentHeader";
 import Assignment from "../../assignment/Assignment";
 import { ProjectContext } from "../../../store/projectContext";
-import { Button } from "reactstrap";
-import ProjectSummary from "../../project/ProjectSummary";
-import ProjectPeople from "../../project/ProjectPeople";
-import ProjectBoard from "../../project/ProjectBoard";
 
 function PageContent() {
   // Project Properties
@@ -16,18 +12,13 @@ function PageContent() {
   const [projectDescription, setProjectDescription] = useState("");
   const [assignments, setAssignments] = useState([]);
 
-  // Change Selected Tabs
   const [selectedProjectTab, setSelectedProjectTab] = useState("Assignment");
 
-  const onTabClick = (tabText) => {
-    setSelectedProjectTab(tabText);
-  };
+  // Consuming ProjectContext
+  const selectedProjectId = useContext(ProjectContext).selectedProjectId;
 
-  // Use local state to store selectedProjectId
-  const { selectedProjectId } = useContext(ProjectContext);
-
-  // Fetch project data based on the selectedProjectId
   useEffect(() => {
+    // Fetch project data based on the selectedProjectId
     if (selectedProjectId !== null) {
       apiService
         .get(apiConfig.getProjects + `/${selectedProjectId}`)
@@ -36,7 +27,7 @@ function PageContent() {
           setProjectId(selectedProject.id);
           setProjectName(selectedProject.name);
           setProjectDescription(selectedProject.description);
-          console.log("PageContent:" + selectedProjectId);
+          console.log(selectedProjectTab);
         })
         .catch((error) => {
           console.error("Error fetching project data: ", error);
@@ -44,15 +35,14 @@ function PageContent() {
     }
   }, [selectedProjectId]);
 
-  // Fetch Assignment of the Selected Project
   useEffect(() => {
-    if (selectedProjectId !== null) {
+    if (projectId !== null) {
       // Fetch assignments based on the selected project's ID
       apiService
         .get(apiConfig.getAssignments)
         .then((res) => {
           const filteredAssignments = res.data.filter(
-            (assignment) => assignment.projectId === selectedProjectId
+            (assignment) => assignment.projectId === projectId
           );
           setAssignments(filteredAssignments);
         })
@@ -60,7 +50,7 @@ function PageContent() {
           console.error("Error fetching assignment data: ", error);
         });
     }
-  }, [selectedProjectId]);
+  }, [projectId]);
 
   return (
     <div>
@@ -71,48 +61,7 @@ function PageContent() {
             projectName={projectName}
             projectDescription={projectDescription}
           />
-          <hr className="mt-3 mb-2 " />
-          <div
-            className="mt-2 mb-2 col-md-12 d-flex 
-          justify-content-between btn-group shadow-sm "
-          >
-            <Button
-              className="btn btn-outline-light bg-gray"
-              onClick={() => {
-                onTabClick("Summary");
-              }}
-            >
-              Summary
-            </Button>
-            <Button
-              className="btn btn-outline-light bg-gray"
-              onClick={() => {
-                onTabClick("Assignments");
-              }}
-            >
-              Assignments
-            </Button>
-            <Button
-              className="btn btn-outline-light bg-gray"
-              onClick={() => {
-                onTabClick("Board");
-              }}
-            >
-              Board
-            </Button>
-            <Button
-              className="btn btn-outline-light bg-gray"
-              onClick={() => {
-                onTabClick("People");
-              }}
-            >
-              People
-            </Button>
-          </div>
-          {selectedProjectTab === "Summary" && (
-            <div className="container">{<ProjectSummary></ProjectSummary>}</div>
-          )}
-          {selectedProjectTab === "Assignments" && (
+          {selectedProjectTab === "Assignment" && (
             <div className="container">
               {assignments.map((assignment) => (
                 <Assignment
@@ -127,10 +76,14 @@ function PageContent() {
             </div>
           )}
           {selectedProjectTab === "People" && (
-            <div className="container">{<ProjectPeople></ProjectPeople>}</div>
+            <div className="container">
+              {/* Render content for "People" tab */}
+            </div>
           )}
           {selectedProjectTab === "Board" && (
-            <div className="container">{<ProjectBoard></ProjectBoard>}</div>
+            <div className="container">
+              {/* Render content for "Board" tab */}
+            </div>
           )}
         </div>
       ) : (
