@@ -7,8 +7,8 @@ function PageContentHeader({ projectId, projectName, projectDescription }) {
   return (
     <div className="container mt-4">
       <div className="d-flex flex-row justify-content-between">
-        <div className="col-12 justify-content-around d-flex">
-          <div className="col-6 align-items-lg-baseline">
+        <div className="d-flex col-12 justify-content-between">
+          <div className="col-6">
             <h3>Project ID: #{selectedProjectId}</h3>
             <h3 className="text-dark">
               <i className="bi bi-diagram-project"></i>

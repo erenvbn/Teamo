@@ -42,19 +42,10 @@ function PageContent() {
     }
   }, [selectedProjectId]);
 
-
-
-
-
-
-
-
-
-
   return (
     <div>
       {selectedProjectId ? (
-        <div>
+        <div className="container">
           <PageContentHeader
             projectId={projectId}
             projectName={projectName}
@@ -99,10 +90,10 @@ function PageContent() {
             </Button>
           </div>
           {selectedProjectTab === "Summary" && (
-            <div className="container">{<ProjectSummary></ProjectSummary>}</div>
+            <div>{<ProjectSummary></ProjectSummary>}</div>
           )}
           {selectedProjectTab === "Assignments" && (
-            <div className="container">
+            <div>
               <div className="d-flex flex-row justify-content-end gap-1">
                 <div className="d-flex btn-group mb-2 justify-content-evenly ">
                   <CreateAssignmentModal></CreateAssignmentModal>
@@ -121,10 +112,10 @@ function PageContent() {
             </div>
           )}
           {selectedProjectTab === "People" && (
-            <div className="container">{<ProjectPeople></ProjectPeople>}</div>
+            <div>{<ProjectPeople></ProjectPeople>}</div>
           )}
           {selectedProjectTab === "Board" && (
-            <div className="container">{<ProjectBoard></ProjectBoard>}</div>
+            <div>{<ProjectBoard></ProjectBoard>}</div>
           )}
         </div>
       ) : (

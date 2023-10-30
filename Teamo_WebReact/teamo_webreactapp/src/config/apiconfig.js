@@ -1,3 +1,4 @@
+//BaseURLs
 const baseConfig = {
   dev: {
     apiBaseUrl: "https://localhost:7001/api/",
@@ -7,10 +8,13 @@ const baseConfig = {
   },
 };
 
+//ProjectStage
 const devStage = "dev";
 
+//Selected BaseURL
 const apiBaseUrl = baseConfig[devStage].apiBaseUrl;
 
+//Endpoints in strings
 const apiConfig = {
   getAssignments: `${apiBaseUrl}Assignment`,
   getProjects: `${apiBaseUrl}Project`,
