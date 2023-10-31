@@ -16,29 +16,31 @@ namespace Teamo_API.Controllers
     public class CommentController : BaseAPIController
     {
         //Dependency injection for db
+        private readonly IProjectRepository _dbProject;
         private readonly IAssignmentRepository _dbAssignment;
         private readonly IUserRepository _dbUser;
         private readonly ICommentRepository _dbComment;
         //Dependency injection for AutoMapper
         private readonly IMapper _mapper;
 
-        public CommentController(IAssignmentRepository dbAssignment, IUserRepository dbUser, ICommentRepository dbComment, IMapper mapper)
+        public CommentController(IProjectRepository dbProject, IAssignmentRepository dbAssignment, IUserRepository dbUser, ICommentRepository dbComment, IMapper mapper)
         {
+            _dbProject = dbProject;
             _dbAssignment = dbAssignment;
             _dbUser = dbUser;
             _dbComment = dbComment;
             _mapper = mapper;
         }
 
-        [HttpGet(Name ="GetComments")]
+        [HttpGet(Name = "GetComments")]
         public async Task<ActionResult<List<CommentDTO>>> GetComments()
         {
             IEnumerable<Comment> commentList = await _dbComment.GetAllAsync();
             return Ok(_mapper.Map<List<CommentDTO>>(commentList));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Comment>> FindProject(int id)
+        [HttpGet("FindComment/{id}")]
+        public async Task<ActionResult<Comment>> FindComment(int id)
         {
             if (id <= 0)
             {
@@ -46,7 +48,7 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbComment.GetAsync(u=> u.Id == id);
+                return await _dbComment.GetAsync(u => u.Id == id);
             }
         }
 
@@ -55,7 +57,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
         [HttpPost]
-        public async Task<ActionResult<CommentDTO>> CreateProject([FromBody] CommentDTO commentDTO)
+        public async Task<ActionResult<CommentDTO>> CreateComment([FromBody] CommentDTO commentDTO)
         {
             try
             {
@@ -85,7 +87,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
-        public async Task<IActionResult> RemoveProject(int id)
+        public async Task<IActionResult> RemoveComment(int id)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (_dbUser.GetAsync(u=> u.Id == id) == null)
+                else if (_dbUser.GetAsync(u => u.Id == id) == null)
                 {
                     return NotFound();
                 }
@@ -114,8 +116,8 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name ="UpdateComment")]
-        public async Task<IActionResult> UpdateProject(int id, [FromBody] CommentDTO commentDTO)
+        [HttpPut("{id:int}", Name = "UpdateComment")]
+        public async Task<IActionResult> UpdateComment(int id, [FromBody] CommentDTO commentDTO)
         {
             try
             {
@@ -136,6 +138,61 @@ namespace Teamo_API.Controllers
             {
                 System.Diagnostics.Trace.WriteLine(ex.Message);
                 return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+
+        [HttpGet("projectcomment/{projectId}", Name = "GetProjectComment")]
+        public async Task<IActionResult> GetProjectComment(int projectId)
+        {
+            if (projectId <= 0)
+            {
+                return BadRequest();
+
+            }
+            else
+            {
+                try
+                {
+                    List<Comment> projectComments = new List<Comment>();
+
+                    var projects = await _dbProject.GetAllAsync();
+                    var assignments = await _dbAssignment.GetAllAsync();
+                    var comments = await _dbComment.GetAllAsync();
+                    var users = await _dbUser.GetAllAsync();
+
+                    var query = from project in projects
+
+                                where project.Id == projectId
+
+                                join assignment in assignments
+                                on project.Id equals assignment.ProjectId
+
+                                join comment in comments
+                                on assignment.Id equals comment.AssignmentId
+
+                                join user in users
+                                on comment.UserId equals user.Id
+                                orderby comment.CreatedAt
+
+                                select new
+                                {
+                                    commentId = comment.Id,
+                                    assignmentId = assignment.Id,
+                                    assignmentName = assignment.Title,
+                                    userName = user.Name,
+                                    commentText = comment.Text,
+                                    commentDate = comment.CreatedAt,
+
+                                };
+
+                    return Ok(query);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                    return StatusCode(500, "Internal Server Error");
+                }
             }
         }
     }

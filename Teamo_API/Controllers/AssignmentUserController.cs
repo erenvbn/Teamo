@@ -20,11 +20,18 @@ namespace Teamo_API.Controllers
         private readonly IAssignmentRepository _dbAssignment;
         private readonly IAssignmentUserRepository _dbAssignmentUser;
         private readonly IUserRepository _dbUser;
+        private readonly IProjectRepository _dbProject;
         //Dependency injection for AutoMapper
         private readonly IMapper _mapper;
 
-        public AssignmentUserController(IAssignmentRepository dbAssignment, IUserRepository dbUser, IAssignmentUserRepository dbAssignmentUser, IMapper mapper)
+        public AssignmentUserController(
+            IAssignmentRepository dbAssignment,
+            IUserRepository dbUser,
+            IAssignmentUserRepository dbAssignmentUser,
+            IProjectRepository dbProject,
+            IMapper mapper)
         {
+            _dbProject = dbProject;
             _dbAssignment = dbAssignment;
             _dbUser = dbUser;
             _dbAssignmentUser = dbAssignmentUser;
@@ -32,7 +39,8 @@ namespace Teamo_API.Controllers
 
         }
 
-        [HttpGet(Name ="GetAssignmentUsers")]
+        [HttpGet("assignmentUsers", Name = "GetAssignmentUsers")]
+
         public async Task<ActionResult<List<AssignmentUserDTO>>> GetAssignmentUsers()
         {
             IEnumerable<AssignmentUser> assignmentUserList = await _dbAssignmentUser.GetAllAsync();
@@ -48,7 +56,41 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbAssignmentUser.GetAsync(u=> u.Id == id);
+                return await _dbAssignmentUser.GetAsync(u => u.Id == id);
+            }
+        }
+
+        [HttpGet("projectUser/{projectId}", Name = "GetProjectUser")]
+        public async Task<ActionResult<List<int>>> GetProjectUser(int projectId)
+        {
+            if (projectId <= 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    var projects = await _dbProject.GetAllAsync();
+                    var assignments = await _dbAssignment.GetAllAsync();
+                    var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
+                    var users = await _dbUser.GetAllAsync();
+
+                    var projectUsers = (from p in projects
+                                        where p.Id == projectId
+                                        join a in assignments on p.Id equals a.ProjectId
+                                        join au in assignmentUsers on a.Id equals au.AssignmentId
+                                        join u in users on au.UserId equals u.Id
+                                        select u).ToList();
+
+                    return Ok(projectUsers);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                    return StatusCode(500, "Internal Server Error");
+                }
+
             }
         }
 
@@ -95,7 +137,7 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (_dbAssignmentUser.GetAsync(u=> u.Id == id) == null)
+                else if (_dbAssignmentUser.GetAsync(u => u.Id == id) == null)
                 {
                     return NotFound();
                 }
@@ -116,7 +158,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name ="UpdateAssignmentUser")]
+        [HttpPut("{id:int}", Name = "UpdateAssignmentUser")]
         public async Task<IActionResult> UpdateAssignmentUser(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
         {
             try

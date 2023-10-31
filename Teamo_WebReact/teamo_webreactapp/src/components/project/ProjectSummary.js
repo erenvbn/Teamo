@@ -10,6 +10,7 @@ import {
   Col,
   Row,
 } from "reactstrap";
+import RecentActivity from "./RecentActivity";
 
 function ProjectSummary({}) {
   const [] = useState(4);
@@ -34,20 +35,17 @@ function ProjectSummary({}) {
               <Card body>
                 <CardTitle tag="h5">Status Overview</CardTitle>
                 <CardText>
-                    View the progress of your project according to assignments' status.
+                  View the progress of your project according to assignments'
+                  status.
                 </CardText>
                 <CardBody></CardBody>
-                <Button>Go somewhere</Button>
               </Card>
             </Col>
             <Col sm="6">
-              <Card body>
-                <CardTitle className="text-end" tag="h5">Recent Activity</CardTitle>
-                <CardText>
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </CardText>
-                <Button>Go somewhere</Button>
+              <Card body className=" shadow-sm border-light">
+                <CardTitle tag="h5">Recent Activity</CardTitle>
+                <CardText></CardText>
+                <RecentActivity></RecentActivity>
               </Card>
             </Col>
           </Row>

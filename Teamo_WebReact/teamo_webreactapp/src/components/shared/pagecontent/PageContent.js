@@ -6,7 +6,7 @@ import Assignment from "../../assignment/Assignment";
 import { ProjectContext } from "../../../store/projectContext";
 import { Button } from "reactstrap";
 import ProjectSummary from "../../project/ProjectSummary";
-import ProjectPeople from "../../project/ProjectPeople";
+import ProjectUser from "../../project/ProjectUser";
 import ProjectBoard from "../../project/ProjectBoard";
 import CreateAssignmentModal from "../../modal/CreateAssignmentModal";
 
@@ -112,7 +112,7 @@ function PageContent() {
             </div>
           )}
           {selectedProjectTab === "People" && (
-            <div>{<ProjectPeople></ProjectPeople>}</div>
+            <div>{<ProjectUser></ProjectUser>}</div>
           )}
           {selectedProjectTab === "Board" && (
             <div>{<ProjectBoard></ProjectBoard>}</div>

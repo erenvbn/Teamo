@@ -23,8 +23,6 @@ export const ProjectContextProvider = ({ children }) => {
         .get(apiConfig.getProjects + `/${selectedProjectId}`)
         .then((res) => {
           setSelectedProjectData(res.data);
-          console.log(res.data);
-          console.log("PageContent:" + selectedProjectId);
         })
         .catch((error) => {
           console.error("Error fetching project data: ", error);

@@ -8,9 +8,7 @@ const axiosService = axios.create({});
 axiosService.interceptors.request.use(
   (request) => {
     const adminAuthToken = "dummyAdminAuthToken";
-    console.log(request.method);
     request.headers["Authorization"] = `Bearer ${adminAuthToken}`;
-    console.log(request.headers.Authorization);
     return request;
   },
   (error) => {
@@ -20,7 +18,6 @@ axiosService.interceptors.request.use(
 
 axiosService.interceptors.response.use(
   (response) => {
-    console.log(response);
     return response;
   },
   (error) => {

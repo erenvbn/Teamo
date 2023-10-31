@@ -7,7 +7,6 @@ function CreateProjectModal(props) {
   const [modalToggle, setModal] = useState(false);
   const [selectedForm, setSelectedForm] = useState("");
   const [selectedProjectId, setSelectedProject] = useState(1);
-  console.log(modalToggle);
 
   //Function that is changing current modal to its reverse
   const toggle = () => setModal(!modalToggle);

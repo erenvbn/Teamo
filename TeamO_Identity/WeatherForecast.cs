@@ -1,4 +1,4 @@
-namespace Teamo_API
+namespace TeamO_Identity
 {
     public class WeatherForecast
     {
