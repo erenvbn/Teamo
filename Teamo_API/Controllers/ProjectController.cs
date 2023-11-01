@@ -28,7 +28,7 @@ namespace Teamo_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name ="GetProjects")]
+        [HttpGet(Name = "GetProjects")]
         public async Task<ActionResult<List<ProjectDTO>>> GetProjects()
         {
             IEnumerable<Project> projectList = await _dbProject.GetAllAsync();
@@ -44,9 +44,35 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbProject.GetAsync(u=> u.Id == id);
+                return await _dbProject.GetAsync(u => u.Id == id);
             }
         }
+
+        [HttpGet("projectassignments/{projectId}", Name = "GetProjectAssignment")]
+        public async Task<IActionResult> GetProjectAssignments(int projectId)
+        {
+            if (projectId <= 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    var projectAssignments = await _dbAssignment.GetAllAsync((a) => a.ProjectId == projectId);
+                    var assignmentStatus = projectAssignments.Select(((a) => a.Status)).ToList();
+                    return Ok(projectAssignments);
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                    return StatusCode(500, "Internal Server Error");
+                }
+            }
+        }
+
+
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -91,7 +117,7 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (_dbProject.GetAsync(u=> u.Id == id) == null)
+                else if (_dbProject.GetAsync(u => u.Id == id) == null)
                 {
                     return NotFound();
                 }
@@ -112,7 +138,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name ="UpdateProject")]
+        [HttpPut("{id:int}", Name = "UpdateProject")]
         public async Task<IActionResult> UpdateProject(int id, [FromBody] ProjectDTO projectDTO)
         {
             try

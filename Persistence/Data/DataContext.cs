@@ -19,6 +19,8 @@ namespace Persistence
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<AssignmentUser> AssignmentUsers { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<Priority> Priorities { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,8 +31,8 @@ namespace Persistence
                 {
                     Id = 1,
                     Name = "Eren",
-                    Email="erenvbn@gmail.com",
-                    Password="ereneren"
+                    Email = "erenvbn@gmail.com",
+                    Password = "ereneren"
                 },
 
                 new User
@@ -61,17 +63,23 @@ namespace Persistence
 
             // Seed data for Project
             modelBuilder.Entity<Project>().HasData(
-                new Project { Id = 1, 
-                    Name = "Database project", 
-                    Description = "A project to design and implement a database system", 
-                    StartDate = new DateTime(2023, 9, 1), 
-                    EndDate = new DateTime(2023, 10, 1) },
+                new Project
+                {
+                    Id = 1,
+                    Name = "Database project",
+                    Description = "A project to design and implement a database system",
+                    StartDate = new DateTime(2023, 9, 1),
+                    EndDate = new DateTime(2023, 10, 1)
+                },
 
-                new Project { Id = 2, 
-                    Name = "Web project", 
-                    Description = "A project to develop a web application using ASP.NET Core and Entity Framework", 
-                    StartDate = new DateTime(2023, 10, 1), 
-                    EndDate = new DateTime(2023, 11, 1) },
+                new Project
+                {
+                    Id = 2,
+                    Name = "Web project",
+                    Description = "A project to develop a web application using ASP.NET Core and Entity Framework",
+                    StartDate = new DateTime(2023, 10, 1),
+                    EndDate = new DateTime(2023, 11, 1)
+                },
 
                 new Project
                 {
@@ -95,19 +103,23 @@ namespace Persistence
 
             // SEED DATA FOR ASSIGNMENT
             modelBuilder.Entity<Assignment>().HasData(
-                new Assignment { Id = 1, 
-                    Title = "Database design", 
-                    Description = "Create an ER diagram and a relational schema for a given scenario", 
-                    DueDate = new DateTime(2023, 9, 20), 
-                    Priority = 4, 
+                new Assignment
+                {
+                    Id = 1,
+                    Title = "Database design",
+                    Description = "Create an ER diagram and a relational schema for a given scenario",
+                    DueDate = new DateTime(2023, 9, 20),
+                    Priority = 4,
                     Status = 0,
                     ProjectId = 1
                 },
-                new Assignment { Id = 2, 
-                    Title = "Web development", 
-                    Description = "Implement a CRUD application using ASP.NET Core and Entity Framework", 
-                    DueDate = new DateTime(2023, 9, 25), 
-                    Priority = 5, 
+                new Assignment
+                {
+                    Id = 2,
+                    Title = "Web development",
+                    Description = "Implement a CRUD application using ASP.NET Core and Entity Framework",
+                    DueDate = new DateTime(2023, 9, 25),
+                    Priority = 5,
                     Status = 0,
                     ProjectId = 2
                 },
@@ -265,6 +277,23 @@ namespace Persistence
                 // Users assigned to Assignment with Id 4 (Game development)
                 new AssignmentUser { Id = 7, AssignmentId = 4, UserId = 3 }, // Bengü is assigned
                 new AssignmentUser { Id = 8, AssignmentId = 4, UserId = 4 }  // Mehmet is assigned
+            );
+
+            //SEED DATA FOR Priority
+            modelBuilder.Entity<Priority>().HasData(
+            new Priority { Id = 1, PriorityTitle = "Unknown" },
+            new Priority { Id = 2, PriorityTitle = "Low Priority" },
+            new Priority { Id = 3, PriorityTitle = "Neutral" },
+            new Priority { Id = 4, PriorityTitle = "High Priority" },
+            new Priority { Id = 5, PriorityTitle = "Critical" }
+            );
+
+            //SEED DATA FOR Status
+            modelBuilder.Entity<Status>().HasData(
+            new Status { Id = 1, StatusTitle = "Pending" },
+            new Status { Id = 2, StatusTitle = "In Process" },
+            new Status { Id = 3, StatusTitle = "Completed" },
+            new Status { Id = 4, StatusTitle = "Canceled" }
             );
         }
     }

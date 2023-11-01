@@ -173,7 +173,7 @@ namespace Teamo_API.Controllers
 
                                 join user in users
                                 on comment.UserId equals user.Id
-                                orderby comment.CreatedAt
+                                orderby comment.Id descending
 
                                 select new
                                 {

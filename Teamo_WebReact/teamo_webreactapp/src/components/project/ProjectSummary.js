@@ -5,12 +5,14 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardSubtitle,
   CardText,
   CardTitle,
   Col,
   Row,
 } from "reactstrap";
 import RecentActivity from "./RecentActivity";
+import PieChartAnimated from "../chart/PieChartAnimated";
 
 function ProjectSummary({}) {
   const [] = useState(4);
@@ -32,11 +34,16 @@ function ProjectSummary({}) {
         <div className="d-flex flex-row justify-content-around card-group gap-3 p-2">
           <Row>
             <Col sm="6">
-              <Card body>
+              <Card body className=" shadow-sm border-light">
                 <CardTitle tag="h5">Status Overview</CardTitle>
                 <CardText>
-                  View the progress of your project according to assignments'
-                  status.
+                  <h5>
+                    View the progress of your project according to assignments'
+                    status.
+                  </h5>
+                  <div className="mt-3">
+                    <PieChartAnimated></PieChartAnimated>
+                  </div>
                 </CardText>
                 <CardBody></CardBody>
               </Card>
@@ -44,7 +51,6 @@ function ProjectSummary({}) {
             <Col sm="6">
               <Card body className=" shadow-sm border-light">
                 <CardTitle tag="h5">Recent Activity</CardTitle>
-                <CardText></CardText>
                 <RecentActivity></RecentActivity>
               </Card>
             </Col>

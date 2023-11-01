@@ -10,14 +10,17 @@ namespace Persistence
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
-        public int Priority { get; set; }
-        public int Status { get; set; }
+
 
         // Navigation properties
+        [ForeignKey("Priority")]
+        public int Priority { get; set; } // Foreign key
+
+        [ForeignKey("Status")]
+        public int Status { get; set; } // Foreign key
 
         [ForeignKey("Project")]
         public int ProjectId { get; set; } // Foreign key
-        //public List<int> UserIds { get; set; } //Users collection navigation
 
     }
 }

@@ -13,7 +13,6 @@ function Assignment({ title, description, dueDate, priority, status }) {
     const timeDifference = dueDate - new Date();
     const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     setRemainingDays(remainingDays);
-    console.log(remainingDays);
   };
 
   return (

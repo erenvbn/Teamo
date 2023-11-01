@@ -24,7 +24,7 @@ function ProjectComment({
         </div>
       </CardHeader>
       <CardBody>
-        <h5 className="text-black">{commentText}</h5>
+        <h5 className="m-0 text-black">{commentText}</h5>
       </CardBody>
       <CardFooter>
         <div className="d-flex flex-row justify-content-between">

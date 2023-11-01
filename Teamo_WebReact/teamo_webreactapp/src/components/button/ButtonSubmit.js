@@ -9,7 +9,6 @@ function ButtonSubmit({ buttonid, text }) {
   const handleClick = () => {
     // Update the selectedProjectId when the button is clicked
     setSelectedProjectId(buttonid);
-    console.log("ButtonSubmit:" + buttonid);
   };
 
   return (

@@ -20,6 +20,7 @@ const apiConfig = {
   getProjects: `${apiBaseUrl}Project`,
   getUsers: `${apiBaseUrl}User`,
   getComments: `${apiBaseUrl}Comment`,
+  getProjectAssignments : `${apiBaseUrl}Project/projectassignments`,
   getProjectComments : `${apiBaseUrl}Comment/projectcomment`,
   getProjectUser : `${apiBaseUrl}AssignmentUser/projectUser`,
 
