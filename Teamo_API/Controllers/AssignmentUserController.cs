@@ -8,6 +8,7 @@ using Persistence;
 using Persistence.Models;
 using Persistence.Repository.IRepository;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Teamo_API.Models.DTO;
 
 namespace Teamo_API.Controllers
@@ -92,6 +93,21 @@ namespace Teamo_API.Controllers
                 }
 
             }
+        }
+
+        [HttpGet("assignmentUser/{assignmentId}", Name = "GetAssignmentUser")]
+        public async Task<IActionResult> GetAssignmentUser(int assignmentId)
+        {
+            var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
+            var users = await _dbUser.GetAllAsync();
+
+            var assignmentUserCredentials = from au in assignmentUsers
+                                            where au.AssignmentId == assignmentId
+                                            join u in users on au.UserId equals u.Id
+                                            select u;
+                                           
+
+            return Ok(assignmentUserCredentials);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

@@ -16,11 +16,13 @@ function PieChartAnimated() {
 
   // Fetch and update data when the selectedProjectId changes
   useEffect(() => {
+    const initialValue = 0;
     // Resetting the counters before fetching new data
-    setStatusPendingCounter(0);
-    setStatusInProcessCounter(0);
-    setStatusCompletedCounter(0);
-    setStatusCanceledCounter(0);
+    setStatusPendingCounter(initialValue);
+    setStatusInProcessCounter(initialValue);
+    setStatusCompletedCounter(initialValue);
+    setStatusCanceledCounter(initialValue);
+    console.log("Seçili Proje Numarası: " + selectedProjectId);
 
     apiService
       .get(apiConfig.getProjectAssignments + `/${selectedProjectId}`)
@@ -54,18 +56,18 @@ function PieChartAnimated() {
           statusCanceledCounter,
         ],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
+          "rgba(255, 195, 0, 1)",
+          "rgba(0, 220, 158, 1)",
+          "rgba(149, 51, 255, 1)",
+          "rgba(255, 106, 69, 1)",
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
         ],
-        borderWidth: 1,
+        borderWidth: 3,
       },
     ],
     options: {
@@ -81,7 +83,7 @@ function PieChartAnimated() {
         legend: {
           display: true,
           responsive: true,
-          position: "top",
+          position: "right",
           labels: {
             boxWidth: 12,
             padding: 7,

@@ -29,6 +29,10 @@
   --status-open: #91e39c; /* Paler status for open tasks or items */
   --status-in-progress: #ffc679; /* Paler status for in-progress tasks or items */
   --status-done: #9acce9; /* Paler status for completed tasks or items */
+
+  --circular-icon-function: #cacaca; /* Paler status for completed tasks or items */
+  --circular-icon: #9e9e9e; /* Paler status for completed tasks or items */
+
 }
 
 /* CHANGING PROGRESS BAR STYLE HERE  */
@@ -124,4 +128,33 @@ hr {
   transform: scale(1.1);
   background-color: rgb(138, 0, 0);
   color: white;
+}
+
+
+
+
+.circular-icon {
+  width: 30px; /* Adjust the size as needed */
+  height: 30px; /* Adjust the size as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--circular-icon); /* Set your desired background color */
+  border-radius: 50%; /* Makes it circular */
+}
+
+
+.circular-icon-function {
+  width: 20px; /* Adjust the size as needed */
+  height: 20px; /* Adjust the size as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--circular-icon-function); /* Set your desired background color */
+  border-radius: 50%; /* Makes it circular */
+}
+
+
+.mb-n-2 {
+  margin-bottom: -0.3rem; /* Adjust as needed */
 }

@@ -32,7 +32,7 @@ function CreateProjectModal(props) {
         <i class="fa-solid fa-gear"></i>
       </Button>
 
-      <Modal isOpen={modalToggle} toggle={toggle} fullscreen>
+      <Modal fullscreen="md" isOpen={modalToggle} toggle={toggle}>
         <ModalHeader toggle={toggle}>{selectedForm}</ModalHeader>
         <ModalBody>
           {selectedForm === "Create Project" ? (

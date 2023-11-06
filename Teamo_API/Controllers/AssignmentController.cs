@@ -26,7 +26,7 @@ namespace Teamo_API.Controllers
         private readonly IMapper _mapper;
 
 
-        public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IAssignmentUserRepository dbAssignmentUser,IMapper mapper)
+        public AssignmentController(IAssignmentRepository dbAssignment, IProjectRepository dbProject, IAssignmentUserRepository dbAssignmentUser, IMapper mapper)
         {
             _dbAssignment = dbAssignment;
             _dbProject = dbProject;
@@ -42,7 +42,10 @@ namespace Teamo_API.Controllers
             return Ok(_mapper.Map<List<AssignmentDTO>>(assignmentList));
         }
 
-        [HttpGet("{id}")]
+
+        //https://localhost:7001/api/Assignment/get/id?id=9
+
+        [HttpGet("{id}", Name = "GetAssignment")]
         public async Task<ActionResult<Assignment>> FindAssignment(int id)
         {
             if (id <= 0)
@@ -51,9 +54,15 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbAssignment.GetAsync(u => u.Id == id);
+                var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
+                if (assignment == null)
+                {
+                    return NotFound(); // Return a 404 Not Found response when the assignment is not found.
+                }
+                return Ok(assignment);
             }
         }
+
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,74 +127,21 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("Update/{assignmentId:int}", Name = "UpdateAssignment")]
-        //[HttpPut("{id:int}", Name = "UpdateAssignment")]
-        public async Task<IActionResult> UpdateAssignment(int assignmentId, [FromBody] AssignmentUpdateDTO assignmentUpdateDTO)
+        [HttpPut("{id:int}", Name = "UpdateAssignment")]
+        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] AssignmentDTO assignmentDTO)
         {
             try
             {
-                var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentId);
-
-                if (assignment == null)
+                var assignments = await _dbAssignment.GetAllAsync();
+                if (!assignments.Any(a => a.Id == id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
-                    switch (assignmentUpdateDTO.OperationType)
-                    {
-                        case "updateAssignment":
-                            // Update assignment logic
-                            assignment = _mapper.Map(assignmentUpdateDTO.AssignmentDTO, assignment);
-                            await _dbAssignment.UpdateAsync(assignment);
-                            break;
-                        case "addUsers":
-                            // Add users to AssignmentUser logic
-
-                            if (assignmentUpdateDTO.UserIds!=null)
-                            {
-
-                                for (int i = 0; i < assignmentUpdateDTO.UserIds.Count(); i++)
-                                {
-                                    var assignmentUser = new AssignmentUser()
-                                    {
-                                        Id = assignmentUsers.OrderByDescending(u => u.Id).First().Id+1,
-                                        AssignmentId = assignmentUpdateDTO.AssignmentDTO.Id,
-                                        UserId = assignmentUpdateDTO.UserIds[i]
-                                    };
-
-                                    if (!assignmentUsers.Contains(assignmentUser))
-                                    {
-                                        await _dbAssignmentUser.CreateAsync(assignmentUser);
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                    return NoContent();
-                                }
-                            }
-                            break;
-                        case "removeUsers":
-                            // Remove users from AssignmentUser logic
-                            var deletedIds = assignmentUsers
-                                .Where(u => u.AssignmentId == assignmentId && assignmentUpdateDTO.UserIds.Contains(u.UserId))
-                                .Select(u => u.Id)
-                                .ToList();
-                            if (deletedIds!=null)
-                            {
-                                foreach (var id in deletedIds)
-                                {
-                                    await _dbAssignmentUser.RemoveAsync(id);
-                                }
-                                await _dbAssignmentUser.SaveAsync();
-                                return NoContent();
-                            }
-                            break;
-                        default:
-                            return BadRequest("Invalid operationType.");
-                    }
+                    var assignment = await _dbAssignment.GetAsync(u => u.Id == id);
+                    assignment = _mapper.Map(assignmentDTO, assignment);
+                    await _dbAssignment.UpdateAsync(assignment);
                     return NoContent();
                 }
             }
@@ -195,5 +151,86 @@ namespace Teamo_API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[HttpPut("Update/{assignmentId:int}", Name = "UpdateAssignmentDetail")]
+        ////[HttpPut("{id:int}", Name = "UpdateAssignment")]
+        //public async Task<IActionResult> UpdateAssignmentDetail(int assignmentId, [FromBody] AssignmentUpdateDTO assignmentUpdateDTO)
+        //{
+        //    try
+        //    {
+        //        var assignment = await _dbAssignment.GetAsync(u => u.Id == assignmentId);
+
+        //        if (assignment == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
+        //            switch (assignmentUpdateDTO.OperationType)
+        //            {
+        //                case "updateAssignment":
+        //                    // Update assignment logic
+        //                    assignment = _mapper.Map(assignmentUpdateDTO.AssignmentDTO, assignment);
+        //                    await _dbAssignment.UpdateAsync(assignment);
+        //                    break;
+        //                case "addUsers":
+        //                    // Add users to AssignmentUser logic
+
+        //                    if (assignmentUpdateDTO.UserIds != null)
+        //                    {
+
+        //                        for (int i = 0; i < assignmentUpdateDTO.UserIds.Count(); i++)
+        //                        {
+        //                            var assignmentUser = new AssignmentUser()
+        //                            {
+        //                                Id = assignmentUsers.OrderByDescending(u => u.Id).First().Id + 1,
+        //                                AssignmentId = assignmentUpdateDTO.AssignmentDTO.Id,
+        //                                UserId = assignmentUpdateDTO.UserIds[i]
+        //                            };
+
+        //                            if (!assignmentUsers.Contains(assignmentUser))
+        //                            {
+        //                                await _dbAssignmentUser.CreateAsync(assignmentUser);
+        //                            }
+        //                            else
+        //                            {
+        //                                continue;
+        //                            }
+        //                            return NoContent();
+        //                        }
+        //                    }
+        //                    break;
+        //                case "removeUsers":
+        //                    // Remove users from AssignmentUser logic
+        //                    var deletedIds = assignmentUsers
+        //                        .Where(u => u.AssignmentId == assignmentId && assignmentUpdateDTO.UserIds.Contains(u.UserId))
+        //                        .Select(u => u.Id)
+        //                        .ToList();
+        //                    if (deletedIds != null)
+        //                    {
+        //                        foreach (var id in deletedIds)
+        //                        {
+        //                            await _dbAssignmentUser.RemoveAsync(id);
+        //                        }
+        //                        await _dbAssignmentUser.SaveAsync();
+        //                        return NoContent();
+        //                    }
+        //                    break;
+        //                default:
+        //                    return BadRequest("Invalid operationType.");
+        //            }
+        //            return NoContent();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Trace.WriteLine(ex.Message);
+        //        return StatusCode(500, "Internal Server Error");
+        //    }
+        //}
     }
 }

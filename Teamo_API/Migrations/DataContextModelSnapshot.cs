@@ -55,7 +55,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 1,
-                            Status = 0,
+                            Status = 2,
                             Title = "Database design"
                         },
                         new
@@ -65,7 +65,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 5,
                             ProjectId = 2,
-                            Status = 0,
+                            Status = 3,
                             Title = "Web development"
                         },
                         new
@@ -75,7 +75,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 3,
-                            Status = 0,
+                            Status = 1,
                             Title = "Mobile development"
                         },
                         new
@@ -85,7 +85,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 5,
                             ProjectId = 4,
-                            Status = 0,
+                            Status = 2,
                             Title = "Game development"
                         },
                         new
@@ -95,7 +95,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 1,
-                            Status = 0,
+                            Status = 4,
                             Title = "Database implementation"
                         },
                         new
@@ -105,7 +105,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 2,
-                            Status = 0,
+                            Status = 1,
                             Title = "Web design"
                         },
                         new
@@ -115,7 +115,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 3,
-                            Status = 0,
+                            Status = 3,
                             Title = "Mobile design"
                         },
                         new
@@ -125,7 +125,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 4,
-                            Status = 0,
+                            Status = 2,
                             Title = "Game design"
                         });
                 });
@@ -283,6 +283,30 @@ namespace Teamo_API.Migrations
                         {
                             Id = 8,
                             AssignmentId = 4,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AssignmentId = 5,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AssignmentId = 6,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AssignmentId = 7,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AssignmentId = 8,
                             UserId = 4
                         });
                 });

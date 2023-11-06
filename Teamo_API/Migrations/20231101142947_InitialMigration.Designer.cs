@@ -11,14 +11,14 @@ using Persistence;
 namespace Teamo_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230915121436_AddedAssignmentUserSeedData")]
-    partial class AddedAssignmentUserSeedData
+    [Migration("20231101142947_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
             modelBuilder.Entity("Persistence.Assignment", b =>
                 {
@@ -237,10 +237,6 @@ namespace Teamo_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignmentId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("AssignmentUsers");
 
                     b.HasData(
@@ -291,6 +287,48 @@ namespace Teamo_API.Migrations
                             Id = 8,
                             AssignmentId = 4,
                             UserId = 4
+                        });
+                });
+
+            modelBuilder.Entity("Persistence.Priority", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PriorityTitle")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Priorities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PriorityTitle = "Unknown"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PriorityTitle = "Low Priority"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PriorityTitle = "Neutral"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            PriorityTitle = "High Priority"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            PriorityTitle = "Critical"
                         });
                 });
 
@@ -353,6 +391,43 @@ namespace Teamo_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Persistence.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StatusTitle")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StatusTitle = "Pending"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            StatusTitle = "In Process"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusTitle = "Completed"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            StatusTitle = "Canceled"
+                        });
+                });
+
             modelBuilder.Entity("Persistence.User", b =>
                 {
                     b.Property<int>("Id")
@@ -404,25 +479,6 @@ namespace Teamo_API.Migrations
                             Name = "Mehmet",
                             Password = "mehmetmehmet"
                         });
-                });
-
-            modelBuilder.Entity("Persistence.Models.AssignmentUser", b =>
-                {
-                    b.HasOne("Persistence.Assignment", "Assignment")
-                        .WithMany()
-                        .HasForeignKey("AssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Persistence.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Assignment");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

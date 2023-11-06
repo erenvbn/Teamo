@@ -11,14 +11,14 @@ using Persistence;
 namespace Teamo_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230912073807_EnlargeCommentSeed")]
-    partial class EnlargeCommentSeed
+    [Migration("20231103125647_AddedAssignmentUsers")]
+    partial class AddedAssignmentUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
             modelBuilder.Entity("Persistence.Assignment", b =>
                 {
@@ -48,8 +48,6 @@ namespace Teamo_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("Assignments");
 
                     b.HasData(
@@ -60,7 +58,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 1,
-                            Status = 0,
+                            Status = 2,
                             Title = "Database design"
                         },
                         new
@@ -70,7 +68,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 5,
                             ProjectId = 2,
-                            Status = 0,
+                            Status = 3,
                             Title = "Web development"
                         },
                         new
@@ -80,7 +78,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 3,
-                            Status = 0,
+                            Status = 1,
                             Title = "Mobile development"
                         },
                         new
@@ -90,7 +88,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 5,
                             ProjectId = 4,
-                            Status = 0,
+                            Status = 2,
                             Title = "Game development"
                         },
                         new
@@ -100,7 +98,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 1,
-                            Status = 0,
+                            Status = 4,
                             Title = "Database implementation"
                         },
                         new
@@ -110,7 +108,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 2,
-                            Status = 0,
+                            Status = 1,
                             Title = "Web design"
                         },
                         new
@@ -120,7 +118,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 3,
-                            Status = 0,
+                            Status = 3,
                             Title = "Mobile design"
                         },
                         new
@@ -130,7 +128,7 @@ namespace Teamo_API.Migrations
                             DueDate = new DateTime(2023, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Priority = 4,
                             ProjectId = 4,
-                            Status = 0,
+                            Status = 2,
                             Title = "Game design"
                         });
                 });
@@ -144,9 +142,6 @@ namespace Teamo_API.Migrations
                     b.Property<int>("AssignmentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -154,11 +149,10 @@ namespace Teamo_API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignmentId");
-
-                    b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
 
@@ -167,65 +161,198 @@ namespace Teamo_API.Migrations
                         {
                             Id = 1,
                             AssignmentId = 1,
-                            AuthorId = 1,
                             CreatedAt = new DateTime(2023, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very challenging"
+                            Text = "This assignment is very challenging",
+                            UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             AssignmentId = 1,
-                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we need to work hard on this"
+                            Text = "I agree, we need to work hard on this",
+                            UserId = 2
                         },
                         new
                         {
                             Id = 3,
                             AssignmentId = 2,
-                            AuthorId = 3,
                             CreatedAt = new DateTime(2023, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very fun"
+                            Text = "This assignment is very fun",
+                            UserId = 3
                         },
                         new
                         {
                             Id = 4,
                             AssignmentId = 2,
-                            AuthorId = 4,
                             CreatedAt = new DateTime(2023, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can learn a lot from this"
+                            Text = "I agree, we can learn a lot from this",
+                            UserId = 4
                         },
                         new
                         {
                             Id = 5,
                             AssignmentId = 3,
-                            AuthorId = 1,
                             CreatedAt = new DateTime(2023, 11, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very interesting"
+                            Text = "This assignment is very interesting",
+                            UserId = 1
                         },
                         new
                         {
                             Id = 6,
                             AssignmentId = 3,
-                            AuthorId = 2,
                             CreatedAt = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can use some cool features of the device"
+                            Text = "I agree, we can use some cool features of the device",
+                            UserId = 2
                         },
                         new
                         {
                             Id = 7,
                             AssignmentId = 4,
-                            AuthorId = 3,
                             CreatedAt = new DateTime(2023, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "This assignment is very creative"
+                            Text = "This assignment is very creative",
+                            UserId = 3
                         },
                         new
                         {
                             Id = 8,
                             AssignmentId = 4,
-                            AuthorId = 4,
                             CreatedAt = new DateTime(2023, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "I agree, we can make a fun game with Unity"
+                            Text = "I agree, we can make a fun game with Unity",
+                            UserId = 4
+                        });
+                });
+
+            modelBuilder.Entity("Persistence.Models.AssignmentUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AssignmentUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AssignmentId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AssignmentId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AssignmentId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AssignmentId = 2,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AssignmentId = 3,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AssignmentId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AssignmentId = 4,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AssignmentId = 4,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AssignmentId = 5,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AssignmentId = 6,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AssignmentId = 7,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AssignmentId = 8,
+                            UserId = 4
+                        });
+                });
+
+            modelBuilder.Entity("Persistence.Priority", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PriorityTitle")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Priorities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PriorityTitle = "Unknown"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PriorityTitle = "Low Priority"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PriorityTitle = "Neutral"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            PriorityTitle = "High Priority"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            PriorityTitle = "Critical"
                         });
                 });
 
@@ -288,6 +415,43 @@ namespace Teamo_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Persistence.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StatusTitle")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StatusTitle = "Pending"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            StatusTitle = "In Process"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusTitle = "Completed"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            StatusTitle = "Canceled"
+                        });
+                });
+
             modelBuilder.Entity("Persistence.User", b =>
                 {
                     b.Property<int>("Id")
@@ -339,51 +503,6 @@ namespace Teamo_API.Migrations
                             Name = "Mehmet",
                             Password = "mehmetmehmet"
                         });
-                });
-
-            modelBuilder.Entity("Persistence.Assignment", b =>
-                {
-                    b.HasOne("Persistence.Project", "Project")
-                        .WithMany("Assignments")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Persistence.Comment", b =>
-                {
-                    b.HasOne("Persistence.Assignment", "Assignment")
-                        .WithMany("Comments")
-                        .HasForeignKey("AssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Persistence.User", "Author")
-                        .WithMany("Comments")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Assignment");
-
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Persistence.Assignment", b =>
-                {
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("Persistence.Project", b =>
-                {
-                    b.Navigation("Assignments");
-                });
-
-            modelBuilder.Entity("Persistence.User", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

@@ -110,7 +110,7 @@ namespace Persistence
                     Description = "Create an ER diagram and a relational schema for a given scenario",
                     DueDate = new DateTime(2023, 9, 20),
                     Priority = 4,
-                    Status = 0,
+                    Status = 2,
                     ProjectId = 1
                 },
                 new Assignment
@@ -120,7 +120,7 @@ namespace Persistence
                     Description = "Implement a CRUD application using ASP.NET Core and Entity Framework",
                     DueDate = new DateTime(2023, 9, 25),
                     Priority = 5,
-                    Status = 0,
+                    Status = 3,
                     ProjectId = 2
                 },
                  new Assignment
@@ -130,7 +130,7 @@ namespace Persistence
                      Description = "Create a simple app that uses the camera and GPS features of the device",
                      DueDate = new DateTime(2023, 11, 20),
                      Priority = 4,
-                     Status = 0,
+                     Status = 1,
                      ProjectId = 3
                  },
                  new Assignment
@@ -140,7 +140,7 @@ namespace Persistence
                      Description = "Make a game that has basic physics and collision detection",
                      DueDate = new DateTime(2023, 12, 20),
                      Priority = 5,
-                     Status = 0,
+                     Status = 2,
                      ProjectId = 4
                  },
                   new Assignment
@@ -150,7 +150,7 @@ namespace Persistence
                       Description = "Write SQL queries to create tables and insert data for the database design",
                       DueDate = new DateTime(2023, 9, 30),
                       Priority = 4,
-                      Status = 0,
+                      Status = 4,
                       ProjectId = 1
                   },
                    new Assignment
@@ -160,7 +160,7 @@ namespace Persistence
                        Description = "Create a responsive and user-friendly UI for the web application using HTML, CSS and Bootstrap",
                        DueDate = new DateTime(2023, 10, 10),
                        Priority = 4,
-                       Status = 0,
+                       Status = 1,
                        ProjectId = 2
                    },
                     new Assignment
@@ -170,7 +170,7 @@ namespace Persistence
                         Description = "Create a native and intuitive UI for the mobile app using Xamarin Forms",
                         DueDate = new DateTime(2023, 11, 30),
                         Priority = 4,
-                        Status = 0,
+                        Status = 3,
                         ProjectId = 3
                     },
                      new Assignment
@@ -180,7 +180,7 @@ namespace Persistence
                          Description = "Create a storyboard and a prototype for the game using Unity tools",
                          DueDate = new DateTime(2023, 12, 30),
                          Priority = 4,
-                         Status = 0,
+                         Status = 2,
                          ProjectId = 4
                      }
             );
@@ -276,7 +276,14 @@ namespace Persistence
 
                 // Users assigned to Assignment with Id 4 (Game development)
                 new AssignmentUser { Id = 7, AssignmentId = 4, UserId = 3 }, // Bengü is assigned
-                new AssignmentUser { Id = 8, AssignmentId = 4, UserId = 4 }  // Mehmet is assigned
+                new AssignmentUser { Id = 8, AssignmentId = 4, UserId = 4 },  // Mehmet is assigned
+
+                // Add unassigned assignments to users
+                new AssignmentUser { Id = 9, AssignmentId = 5, UserId = 1 },  // Eren is assigned to Assignment 5
+                new AssignmentUser { Id = 10, AssignmentId = 6, UserId = 2 }, // Emre is assigned to Assignment 6
+                new AssignmentUser { Id = 11, AssignmentId = 7, UserId = 3 }, // Bengü is assigned to Assignment 7
+                new AssignmentUser { Id = 12, AssignmentId = 8, UserId = 4 }  // Mehmet is assigned to Assignment 8
+
             );
 
             //SEED DATA FOR Priority

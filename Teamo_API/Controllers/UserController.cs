@@ -29,14 +29,14 @@ namespace Teamo_API.Controllers
         }
 
         [HttpGet(Name ="GetUsers")]
-        public async Task<ActionResult<List<UserDTO>>> GetProjects()
+        public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
             IEnumerable<User> userList = await _dbUser.GetAllAsync();
             return Ok(_mapper.Map<List<UserDTO>>(userList));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> FindProject(int id)
+        public async Task<ActionResult<User>> FindUser(int id)
         {
             if (id <= 0)
             {
@@ -53,7 +53,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> CreateProject([FromBody] UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> CreateUser([FromBody] UserDTO userDTO)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
-        public async Task<IActionResult> RemoveProject(int id)
+        public async Task<IActionResult> RemoveUser(int id)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id:int}", Name ="UpdateUser")]
-        public async Task<IActionResult> UpdateProject(int id, [FromBody] UserDTO userDTO)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
         {
             try
             {

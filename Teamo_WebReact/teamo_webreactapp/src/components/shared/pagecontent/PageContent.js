@@ -42,6 +42,21 @@ function PageContent() {
     }
   }, [selectedProjectId]);
 
+  const priorities = {
+    1: "Unknown",
+    2: "Low Priority",
+    3: "Neutral",
+    4: "High Priority",
+    5: "Critical",
+  };
+
+  const statuses = {
+    1: "Pending",
+    2: "In Process",
+    3: "Completed",
+    4: "Canceled",
+  };
+
   return (
     <div>
       {selectedProjectId ? (
@@ -102,11 +117,12 @@ function PageContent() {
               {assignments.map((assignment) => (
                 <Assignment
                   key={assignment.id}
+                  sharedKey={assignment.id}
                   title={assignment.title}
                   description={assignment.description}
                   dueDate={assignment.dueDate}
-                  priority={assignment.priority}
-                  status={assignment.status}
+                  priority={priorities[assignment.priority]}
+                  status={statuses[assignment.status]}
                 />
               ))}
             </div>

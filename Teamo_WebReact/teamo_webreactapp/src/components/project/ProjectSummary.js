@@ -15,12 +15,11 @@ import RecentActivity from "./RecentActivity";
 import PieChartAnimated from "../chart/PieChartAnimated";
 
 function ProjectSummary({}) {
-  const [] = useState(4);
   const selectedProjectId = useContext(ProjectContext).selectedProjectId;
 
   return (
     <div>
-      <div className="card mb-3 shadow-sm">
+      <div className="card mb-3 shadow-sm p-3">
         <div className="d-flex flex-row justify-content-between m-2">
           <div className="card-body">
             <h4 className=" text-body-emphasis text-capitalize text-center">
@@ -42,7 +41,8 @@ function ProjectSummary({}) {
                     status.
                   </h5>
                   <div className="mt-3">
-                    <PieChartAnimated></PieChartAnimated>
+                    <PieChartAnimated
+                    projectId={selectedProjectId}></PieChartAnimated>
                   </div>
                 </CardText>
                 <CardBody></CardBody>

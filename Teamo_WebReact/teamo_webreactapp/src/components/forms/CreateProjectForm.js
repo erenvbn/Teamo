@@ -8,7 +8,6 @@ import { Alert } from "reactstrap";
 import { ProjectContext } from "../../store/projectContext";
 
 function CreateProjectForm() {
-
   const [projectData, setProjectData] = useState({
     id: 1,
     name: "",
@@ -39,12 +38,12 @@ function CreateProjectForm() {
 
   return (
     // <!-- Create project Form  -->
-    <div className="flex-row col-12 justify-content-between">
+    <div className="flex-row col-12">
       <div id="panel">
         <form
           id="createProjectForm"
           method="post"
-          className="d-grid gap-2 row m-3 col-6"
+          className="d-grid gap-2 row m-3"
           onSubmit={(e) => e.preventDefault()}
         >
           <div>
@@ -92,6 +91,7 @@ function CreateProjectForm() {
             />
           </div>
           <ButtonCreateProject
+            buttonText={"Create Project"}
             onProjectCreate={CreateProject}
           ></ButtonCreateProject>
           <Alert isOpen={isSuccessAlertVisible} color="info">
