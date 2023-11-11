@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository.IRepository
 {
-    public interface IAssignmentUserRepository:IRepository<AssignmentUser>
+    public interface IAssignmentUserRepository : IRepository<AssignmentUser>
     {
-        Task<List<AssignmentUser>> GetAllAsync(Expression<Func<AssignmentUser,bool>> filter = null);
-        Task<AssignmentUser> GetAsync(Expression<Func<AssignmentUser,bool>> filter = null, bool tracked= true);
+        Task<List<AssignmentUser>> GetAllAsync(Expression<Func<AssignmentUser, bool>> filter = null);
+        Task<AssignmentUser> GetAsync(Expression<Func<AssignmentUser, bool>> filter = null, bool tracked = true);
         Task CreateAsync(AssignmentUser entity);
         Task UpdateAsync(AssignmentUser entity);
         Task RemoveAsync(int id);
+        Task RemoveAllAsync(int id);
         Task SaveAsync();
     }
 }

@@ -105,7 +105,7 @@ namespace Teamo_API.Controllers
                                             where au.AssignmentId == assignmentId
                                             join u in users on au.UserId equals u.Id
                                             select u;
-                                           
+
 
             return Ok(assignmentUserCredentials);
         }
@@ -114,8 +114,8 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        [HttpPost]
-        public async Task<ActionResult<AssignmentUserDTO>> CreateAssignmentUser([FromBody] AssignmentUserDTO assignmentUserDTO)
+        [HttpPost("CreateAssignmentUser")]
+        public async Task<ActionResult<AssignmentUserDTO>> CreateAssignmentUser(AssignmentUserDTO assignmentUserDTO)
         {
             try
             {
@@ -126,12 +126,20 @@ namespace Teamo_API.Controllers
                 else
                 {
                     var assignmentUsers = await _dbAssignmentUser.GetAllAsync();
-                    assignmentUserDTO.Id = assignmentUsers.OrderByDescending(u => u.Id).First().Id + 1;
+                    if (assignmentUsers.Count == 0)
+                    {
+                        assignmentUserDTO.Id = 1;
+                    }
+                    else
+                    {
+                        assignmentUserDTO.Id = assignmentUsers.OrderByDescending(u => u.Id).First().Id + 1;
 
-                    var assignmentUser = _mapper.Map<User>(assignmentUserDTO);
+                    }
 
-                    await _dbUser.CreateAsync(assignmentUser);
-                    return CreatedAtRoute("GetAssignmentUsers", new { id = assignmentUser.Id }, assignmentUser);
+                    var newAssignmentUser = _mapper.Map<AssignmentUser>(assignmentUserDTO);
+
+                    await _dbAssignmentUser.CreateAsync(newAssignmentUser);
+                    return CreatedAtRoute("GetAssignmentUsers", new { id = newAssignmentUser.Id }, newAssignmentUser);
                 }
             }
             catch (Exception ex)
@@ -141,56 +149,25 @@ namespace Teamo_API.Controllers
             }
         }
 
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete]
-        public async Task<IActionResult> RemoveAssignmentUser(int id)
+        [HttpPost("ManageAssignmentUserUpdate")]
+        public async Task<IActionResult> ManageAssignmentUserUpdate([FromBody] AssignmentUserUpdateDTO assignmentUserUpdateDTO)
         {
             try
             {
-                if (id <= 0)
-                {
-                    return BadRequest();
-                }
-                else if (_dbAssignmentUser.GetAsync(u => u.Id == id) == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    await _dbAssignmentUser.RemoveAsync(id);
-                    await _dbAssignmentUser.SaveAsync();
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                return StatusCode(500, "Internal Server Error");
-            }
-        }
+                var deletedAssignmentId = assignmentUserUpdateDTO.AssignmentId;
+                await _dbAssignmentUser.RemoveAllAsync(deletedAssignmentId);
 
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name = "UpdateAssignmentUser")]
-        public async Task<IActionResult> UpdateAssignmentUser(int id, [FromBody] AssignmentUserDTO assignmentUserDTO)
-        {
-            try
-            {
-                var projects = await _dbAssignmentUser.GetAllAsync();
-                if (!projects.Any(u => u.Id == id))
+                foreach (var userId in assignmentUserUpdateDTO.UserIds)
                 {
-                    return NotFound();
+                    var newAssignmentUser = new AssignmentUserDTO
+                    {
+                        AssignmentId = assignmentUserUpdateDTO.AssignmentId,
+                        UserId = userId
+                    };
+                    await CreateAssignmentUser(newAssignmentUser);
                 }
-                else
-                {
-                    var assignmentUser = await _dbUser.GetAsync(u => u.Id == id);
-                    assignmentUser = _mapper.Map(assignmentUserDTO, assignmentUser);
-                    await _dbUser.UpdateAsync(assignmentUser);
-                    return NoContent();
-                }
+
+                return NoContent();
             }
             catch (Exception ex)
             {

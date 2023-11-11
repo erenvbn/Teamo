@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class AssignmentUserRepository :IAssignmentUserRepository
+    public class AssignmentUserRepository : IAssignmentUserRepository
     {
         private readonly DataContext _dataContext;
         public AssignmentUserRepository(DataContext dataContext)
@@ -51,6 +51,15 @@ namespace Persistence.Repository
         {
             var assignmentUser = _dataContext.AssignmentUsers.Find(id);
             _dataContext.AssignmentUsers.Remove(assignmentUser);
+            await SaveAsync();
+        }
+
+        public async Task RemoveAllAsync(int deletedAssignmentId)
+        {
+            var assignmentUserstoDelete = _dataContext.AssignmentUsers
+                .Where(au => au.AssignmentId == deletedAssignmentId).ToList();
+
+            _dataContext.AssignmentUsers.RemoveRange(assignmentUserstoDelete);
             await SaveAsync();
         }
 

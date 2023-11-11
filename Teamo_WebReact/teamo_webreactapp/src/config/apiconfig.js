@@ -31,6 +31,8 @@ const apiConfig = {
   postAssignment: `${apiBaseUrl}Assignment`,
   postUser: `${apiBaseUrl}User`,
   postComment: `${apiBaseUrl}Comment`,
+  postAssignmentUser: `${apiBaseUrl}AssignmentUser/CreateAssignmentUser`,
+  postManageAssignmentUsers: `${apiBaseUrl}AssignmentUser/ManageAssignmentUserUpdate`,
   
   //DELETE METHODS
   deleteProject: `${apiBaseUrl}Project?id=`,

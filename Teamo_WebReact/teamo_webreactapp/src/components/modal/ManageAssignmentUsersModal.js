@@ -6,7 +6,6 @@ import {
   ModalBody,
   ModalFooter,
   Container,
-  Card,
 } from "reactstrap";
 import apiService from "../../services/apiService";
 import apiConfig from "../../config/apiconfig";
@@ -19,31 +18,30 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
   const [clickedUserId, setClickedUserId] = useState();
   const [unAssignedUsersArray, setUnassignedUsersArray] = useState([]);
   const [assignedUsersArray, setAssignedUsersArray] = useState([]);
-  const [assignationToggle, setAssignationToggle] = useState(false);
+  const [assignmentUserUpdateDTO, setAssignmentUserUpdateDTO] = useState({
+    AssignmentId: sharedKey,
+    UserIds: [],
+  });
 
   //FETCHING ALL USERS and SETTING UNASSIGNED USERS
   useEffect(() => {
     apiService
       .get(apiConfig.getUsers)
       .then((res) => {
-        setAllUsersArray(res.data);
         const allUsers = res.data;
-        const unAssignedUsersArray = AssigneeSeparator(
+        setAllUsersArray(allUsers);
+
+        const unAssignedUsers = AssigneeSeparator(
           allUsers,
           selectedAssignmentUsers
         );
-        setUnassignedUsersArray(unAssignedUsersArray);
+        setUnassignedUsersArray(unAssignedUsers);
         setAssignedUsersArray(selectedAssignmentUsers);
       })
       .catch((error) => {
         console.error("Error while getting all users:", error);
       });
-  }, [assignationToggle]);
-
-  // console.log("unAssignedUsersArray");
-  // console.log(unAssignedUsersArray);
-  // console.log("assignedUsersArray");
-  // console.log(assignedUsersArray);
+  }, [selectedAssignmentUsers]);
 
   //ASSIGNED-UNASSIGNED SEPARATOR FUNCTION
   const AssigneeSeparator = (allUsersArray, assignedUsersArray) => {
@@ -57,45 +55,76 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
     return unAssignedUsersArray;
   };
 
-  //GET CLICKED BUTTONID
+  // GET CLICKED BUTTONID
   const changeAssignationStatus = (clickedButtonId) => {
     setClickedUserId(clickedButtonId);
-    // console.log("clickedUserId");
-    // console.log(clickedButtonId);
-    unAssignedUsersArray.forEach((user) => {
-      if (user.id == clickedButtonId) {
-        const indexUser = unAssignedUsersArray.indexOf(user);
 
-        unAssignedUsersArray.splice(indexUser, 1);
+    const isUserIdInUnassigned = unAssignedUsersArray.find(
+      (u) => u.id === clickedButtonId
+    );
+    const isUserIdInAssigned = assignedUsersArray.find(
+      (u) => u.id === clickedButtonId
+    );
 
-        assignedUsersArray.push(user);
-        //setAssignedUsersArray(assignedUsersArray);
-        //setUnassignedUsersArray(unAssignedUsersArray);
+    if (isUserIdInUnassigned) {
+      const updatedUnassignedUsers = unAssignedUsersArray.filter(
+        (u) => u.id !== clickedButtonId
+      );
+      const userToMove = unAssignedUsersArray.find(
+        (u) => u.id === clickedButtonId
+      );
+      setUnassignedUsersArray(updatedUnassignedUsers);
 
-        setAssignationToggle((prevToggle) => !prevToggle);
-      }
-    });
-    // setUnassignedUsersArray(unAssignedUsersArray);
-    assignedUsersArray.forEach((user) => {
-      if (user.id == clickedButtonId) {
-        const indexUser = assignedUsersArray.indexOf(user);
+      const updatedAssignedUsers = [...assignedUsersArray, userToMove];
+      setAssignedUsersArray(updatedAssignedUsers);
 
-        assignedUsersArray.splice(indexUser, 1);
-        //setAssignedUsersArray(assignedUsersArray);
 
-        unAssignedUsersArray.push(user);
-        //setUnassignedUsersArray(unAssignedUsersArray);
+      console.log(assignedUsersArray);
+    } else if (isUserIdInAssigned) {
+      const updatedAssignedUsers = assignedUsersArray.filter(
+        (u) => u.id !== clickedButtonId
+      );
+      setAssignedUsersArray(updatedAssignedUsers);
 
-        setAssignationToggle((prevToggle) => !prevToggle);
-      }
-    });
+      const userToMove = assignedUsersArray.find(
+        (u) => u.id === clickedButtonId
+      );
+      const updatedUnassignedUsers = [...unAssignedUsersArray, userToMove];
+      setUnassignedUsersArray(updatedUnassignedUsers);
+
+      console.log("unAssignedUsersArray");
+      console.log(unAssignedUsersArray);
+    }
   };
-  // setAssignedUsersArray(assignedUsersArray);
 
-  console.log("unAssignedUsersArray");
-  console.log(unAssignedUsersArray);
-  console.log("assignedUsersArray");
-  console.log(assignedUsersArray);
+  //Sending request for managing assignmentusers of a particular assignment
+  useEffect(() => {
+    // Check if UserIds array is not empty before making the API call
+    if (assignmentUserUpdateDTO.UserIds.length > 0) {
+      apiService
+        .post(apiConfig.postManageAssignmentUsers, assignmentUserUpdateDTO)
+        .then((res) => {
+          console.log("Response status:", res.status);
+        })
+        .catch((error) => {
+          console.error("Error while posting assignmentUsers data:", error);
+        });
+    }
+  }, [assignmentUserUpdateDTO]);
+
+  //ManageAssignmentUser for creating request body for assignmentusers
+  function ManageAssignmentUsers(sharedKey, assignedUsersArray) {
+    const usersIdsArray = assignedUsersArray.map((user) => user.id);
+    console.log("usersIdsArray in manageassignmentUsers");
+    console.log(usersIdsArray);
+
+    setAssignmentUserUpdateDTO({
+      AssignmentId: sharedKey,
+      UserIds: usersIdsArray,
+    });
+    console.log("ÖNEMLİ GİDEN PAKET AssignmentUserUpdateDTO");
+    console.log(assignmentUserUpdateDTO);
+  }
 
   return (
     <div>
@@ -103,7 +132,7 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
         onClick={toggle}
         className="circular-icon-function btn-animation-green border-0 btn-sm"
       >
-        <i class="fa-solid fa-plus text-light "></i>{" "}
+        <i className="fa-solid fa-plus text-light "></i>{" "}
       </Button>
       <Modal
         backdrop={false}
@@ -130,11 +159,11 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
                   ></UserBadge>
                 );
               })}
-              {/* MIDDLE*/}
             </Container>
+            {/* MIDDLE */}
             <Container className="d-flex col-2">
-              <div className="d-flex flex-row align-items-center ">
-                <i className="fa-solid fa-arrow-right-arrow-left "></i>{" "}
+              <div className="d-flex flex-row align-items-center">
+                <i className="fa-solid fa-arrow-right-arrow-left"></i>{" "}
               </div>
             </Container>
             {/* ASSIGNED */}
@@ -155,7 +184,13 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
           </Container>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
+          <Button
+            color="primary"
+            onClick={() => {
+              toggle();
+              ManageAssignmentUsers(sharedKey, assignedUsersArray);
+            }}
+          >
             Manage Assignees
           </Button>{" "}
           <Button color="secondary" onClick={toggle}>

@@ -113,6 +113,8 @@ namespace Teamo_API.Controllers
                 else
                 {
                     await _dbAssignment.RemoveAsync(id);
+                    await _dbAssignmentUser.RemoveAllAsync(id);
+
                     await _dbAssignment.SaveAsync();
                     return NoContent();
                 }
