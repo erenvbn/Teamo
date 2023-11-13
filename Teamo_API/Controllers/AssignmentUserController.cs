@@ -82,7 +82,7 @@ namespace Teamo_API.Controllers
                                         join a in assignments on p.Id equals a.ProjectId
                                         join au in assignmentUsers on a.Id equals au.AssignmentId
                                         join u in users on au.UserId equals u.Id
-                                        select u).ToList();
+                                        select u).Distinct().ToList();
 
                     return Ok(projectUsers);
                 }

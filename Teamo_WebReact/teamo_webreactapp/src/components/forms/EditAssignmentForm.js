@@ -20,6 +20,7 @@ const EditAssignmentForm = ({ editedAssignmentId }) => {
         // Format the date here
         const formattedAssignmentData = {
           ...res.data,
+          startDate: formatDate(res.data.startDate),
           dueDate: formatDate(res.data.dueDate),
         };
         setAssignmentData(formattedAssignmentData);
@@ -50,6 +51,7 @@ const EditAssignmentForm = ({ editedAssignmentId }) => {
       // Format the date here
       const formattedAssignmentData = {
         ...assignmentData,
+        startDate: formatDate(assignmentData.startDate),
         dueDate: formatDate(assignmentData.dueDate),
       };
       console.log("FATitle:"+ formattedAssignmentData.title);

@@ -76,6 +76,20 @@ function CreateProjectFormMain() {
         </FormGroup>
 
         <FormGroup row>
+          <Label htmlFor="startDate" sm={2}>
+            Start Date
+          </Label>
+          <Col sm={10}>
+            <Input
+              id="startDate"
+              name="startDate"
+              placeholder="date placeholder"
+              type="date"
+            />
+          </Col>
+        </FormGroup>
+
+        <FormGroup row>
           <Label htmlFor="dueDate" sm={2}>
             Due Date
           </Label>

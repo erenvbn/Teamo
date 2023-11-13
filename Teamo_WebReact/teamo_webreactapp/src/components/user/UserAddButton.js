@@ -4,7 +4,7 @@ function UserIcon({ userFirstLetter }) {
   return (
     <div>
       <div className="circular-icon m-1">
-        <i class="fa-solid fa-plus text-light"></i>{" "}
+        <i classname="fa-solid fa-plus text-light"></i>{" "}
       </div>
     </div>
   );

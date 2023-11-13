@@ -19,7 +19,7 @@ function CreateAssignmentModal(props) {
         }}
       >
         Create
-        <i class="fa-regular fa-square-plus ms-1"></i>{" "}
+        <i className="fa-regular fa-square-plus ms-1"></i>{" "}
       </Button>
       <Modal fullscreen='md' isOpen={modalToggle} toggle={toggle}>
         <ModalHeader>Create Assignment</ModalHeader>

@@ -120,6 +120,7 @@ function PageContent() {
                   sharedKey={assignment.id}
                   title={assignment.title}
                   description={assignment.description}
+                  startDate={assignment.startDate}
                   dueDate={assignment.dueDate}
                   priority={priorities[assignment.priority]}
                   status={statuses[assignment.status]}

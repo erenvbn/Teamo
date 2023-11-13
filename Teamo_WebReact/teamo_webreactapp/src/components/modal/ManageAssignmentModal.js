@@ -12,7 +12,7 @@ function ManageAssignmentModal({ assignmentKey, onClick }) {
 
   return (
     <div>
-      <div className="btn-group me-2 mb-2">
+      <div className="btn-group mb-2">
         {/* Edit Assignment Button */}
         <Button
           assignmentKey={assignmentKey}

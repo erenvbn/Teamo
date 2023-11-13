@@ -36,13 +36,16 @@ function ProjectSummary({}) {
               <Card body className=" shadow-sm border-light">
                 <CardTitle tag="h5">Status Overview</CardTitle>
                 <CardText>
-                  <h5>
-                    View the progress of your project according to assignments'
-                    status.
-                  </h5>
+                  <div>
+                    <h5>
+                      View the progress of your project according to
+                      assignments' status.
+                    </h5>
+                  </div>
                   <div className="mt-3">
                     <PieChartAnimated
-                    projectId={selectedProjectId}></PieChartAnimated>
+                      projectId={selectedProjectId}
+                    ></PieChartAnimated>
                   </div>
                 </CardText>
                 <CardBody></CardBody>

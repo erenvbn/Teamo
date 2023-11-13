@@ -79,7 +79,6 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
       setAssignedUsersArray(updatedAssignedUsers);
 
 
-      console.log(assignedUsersArray);
     } else if (isUserIdInAssigned) {
       const updatedAssignedUsers = assignedUsersArray.filter(
         (u) => u.id !== clickedButtonId
@@ -92,8 +91,6 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
       const updatedUnassignedUsers = [...unAssignedUsersArray, userToMove];
       setUnassignedUsersArray(updatedUnassignedUsers);
 
-      console.log("unAssignedUsersArray");
-      console.log(unAssignedUsersArray);
     }
   };
 
@@ -115,15 +112,11 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
   //ManageAssignmentUser for creating request body for assignmentusers
   function ManageAssignmentUsers(sharedKey, assignedUsersArray) {
     const usersIdsArray = assignedUsersArray.map((user) => user.id);
-    console.log("usersIdsArray in manageassignmentUsers");
-    console.log(usersIdsArray);
 
     setAssignmentUserUpdateDTO({
       AssignmentId: sharedKey,
       UserIds: usersIdsArray,
     });
-    console.log("ÖNEMLİ GİDEN PAKET AssignmentUserUpdateDTO");
-    console.log(assignmentUserUpdateDTO);
   }
 
   return (

@@ -1,0 +1,40 @@
+/* Assignment.css */
+
+.assignment-card {
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: start;
+}
+
+.assignment-card h3 {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.assignment-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.assignment-info {
+  margin-top: 15px;
+}
+
+.assignment-description {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}
+
+.assignment-text {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.vertical-line {
+  border-right: 1px solid rgb(223, 228, 233);
+  height: 100%;
+  margin: 0 20px; 
+}

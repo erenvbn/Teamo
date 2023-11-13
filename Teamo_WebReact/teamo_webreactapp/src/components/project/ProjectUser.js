@@ -27,7 +27,7 @@ function ProjectUser() {
           <h5 className="card-title text-capitalize">
             Assignees in this project
           </h5>
-          <div className="d-flex flex-wrap gap-3">
+          <div className="d-flex flex-wrap gap-2">
             {users.map((user) => {
               return (
                 <User
@@ -40,6 +40,8 @@ function ProjectUser() {
           </div>
         </div>
       </div>
+
+
     </div>
   );
 }

@@ -9,6 +9,7 @@ function CreateAssignmentForm() {
   const [assignmentData, setAssignmentData] = useState({
     title: "",
     description: "",
+    startDate:"",
     dueDate: "",
     priority: "1",
     status: "1",
@@ -78,6 +79,15 @@ function CreateAssignmentForm() {
               id="assignmentDescription"
               name="description"
               rows="4"
+              onChange={handleChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="startDate">Start Date:</Label>
+            <Input
+              type="date"
+              id="assignmentStartDate"
+              name="startDate"
               onChange={handleChange}
             />
           </FormGroup>
