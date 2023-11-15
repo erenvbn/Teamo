@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Persistence\Teamo_DataAccess.csproj" />
-    <ProjectReference Include="..\TeamO_Identity\TeamO_Identity.csproj" />
   </ItemGroup>
 
 </Project>
