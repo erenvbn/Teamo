@@ -22,7 +22,8 @@ function PageContent() {
     setSelectedProjectTab(tabText);
   };
   // Use local state to store selectedProjectId
-  const { selectedProjectId, selectedProjectData } = useContext(ProjectContext);
+  const { selectedProjectId, refreshAssignmentUsersFlag } =
+    useContext(ProjectContext);
 
   // Fetch Assignment of the Selected Project
   useEffect(() => {
@@ -40,7 +41,11 @@ function PageContent() {
           console.error("Error fetching assignment data: ", error);
         });
     }
-  }, [selectedProjectId]);
+  }, [selectedProjectId, refreshAssignmentUsersFlag]);
+
+  // useEffect(() => {
+  //   console.log("PAGE CONTENT ÇALIŞTI");
+  // });
 
   const priorities = {
     1: "Unknown",

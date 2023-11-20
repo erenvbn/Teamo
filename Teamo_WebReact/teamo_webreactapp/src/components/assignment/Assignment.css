@@ -5,36 +5,63 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: start;
+  transition: box-shadow 0.3s ease-in-out; /* Add transition for smooth effect */
 }
 
 .assignment-card h3 {
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: 1.1rem;
+  font-size: 1.1em;
+  font-weight: normal;
+  color: #343a40; /* Dark text color */
 }
 
 .assignment-title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
+  color: #007bff; /* Primary color */
 }
 
 .assignment-info {
-  margin-top: 15px;
+  margin-top: 2rem;
 }
 
 .assignment-description {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
   color: #6c757d;
 }
 
 .assignment-text {
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
-.vertical-line {
-  border-right: 1px solid rgb(223, 228, 233);
-  height: 100%;
-  margin: 0 20px; 
+.user-line {
+  border-top: 1px solid rgb(223, 228, 233);
+  margin-top: 2rem;
+}
+
+/* Added styles for date and time */
+.assignment-text p {
+  margin-bottom: 0.2rem;
+}
+
+/* Adjusted progress bar styles */
+.assignment-info .progress {
+  height: 15px;
+  border-radius: 5px;
+}
+
+/* Adjusted progress bar text styles */
+.progress-bar {
+  font-size: 0.9rem;
+  line-height: 15px;
+}
+
+.assignment-card:hover {
+  background-color: #edf2f7;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }

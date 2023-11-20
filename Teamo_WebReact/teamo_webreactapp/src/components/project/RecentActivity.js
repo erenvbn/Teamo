@@ -3,6 +3,7 @@ import { ProjectContext } from "../../store/projectContext";
 import ProjectComment from "../comment/ProjectComment";
 import apiService from "../../services/apiService";
 import apiConfig from "../../config/apiconfig";
+import { splitCommentDate } from "../../utilities/dateUtils";
 
 function RecentActivity() {
   const { selectedProjectId, selectedProjectData } = useContext(ProjectContext);
@@ -24,8 +25,9 @@ function RecentActivity() {
   return (
     <div>
       {projectComments.map((comment) => {
-        const [commentDateDay, commentDateHour] =
-          comment.commentDate.split("T");
+        const [commentDateDay, commentDateHour] = splitCommentDate(
+          comment.commentDate
+        );
         return (
           <div key={comment.commentId}>
             <ProjectComment

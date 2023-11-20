@@ -29,7 +29,7 @@ function CreateProjectModal(props) {
           setSelectedForm("Edit Project");
         }}
       >
-        <i class="fa-solid fa-gear"></i>
+        <i className="fa-solid fa-gear"></i>
       </Button>
 
       <Modal fullscreen="md" isOpen={modalToggle} toggle={toggle}>

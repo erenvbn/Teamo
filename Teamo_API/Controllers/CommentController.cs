@@ -195,5 +195,50 @@ namespace Teamo_API.Controllers
                 }
             }
         }
+
+        [HttpGet("assignmentcomment/{assignmentId}", Name = "GetAssignmentComment")]
+        public async Task<IActionResult> GetAssignmentComment(int assignmentId)
+        {
+            if (assignmentId <= 0)
+            {
+                return BadRequest();
+
+            }
+            else
+            {
+                try
+                {
+                    List<Comment> assignmentComments = new List<Comment>();
+
+                    var assignments = await _dbAssignment.GetAllAsync();
+                    var comments = await _dbComment.GetAllAsync();
+                    var users = await _dbUser.GetAllAsync();
+
+                    var query = from comment in comments
+
+                                where comment.AssignmentId == assignmentId
+
+                                join user in users
+                                on comment.UserId equals user.Id
+                                orderby comment.Id descending
+
+                                select new
+                                {
+                                    commentId = comment.Id,
+                                    commentAssignmentId = comment.AssignmentId,
+                                    commentText = comment.Text,
+                                    userName = user.Name,
+                                    commentDate = comment.CreatedAt,
+                                };
+
+                    return Ok(query);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                    return StatusCode(500, "Internal Server Error");
+                }
+            }
+        }
     }
 }

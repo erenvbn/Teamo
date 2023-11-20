@@ -77,8 +77,6 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
 
       const updatedAssignedUsers = [...assignedUsersArray, userToMove];
       setAssignedUsersArray(updatedAssignedUsers);
-
-
     } else if (isUserIdInAssigned) {
       const updatedAssignedUsers = assignedUsersArray.filter(
         (u) => u.id !== clickedButtonId
@@ -90,7 +88,6 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
       );
       const updatedUnassignedUsers = [...unAssignedUsersArray, userToMove];
       setUnassignedUsersArray(updatedUnassignedUsers);
-
     }
   };
 
@@ -125,7 +122,7 @@ function ManageAssignmentUsersModal({ sharedKey, selectedAssignmentUsers }) {
         onClick={toggle}
         className="circular-icon-function btn-animation-green border-0 btn-sm"
       >
-        <i className="fa-solid fa-plus text-light "></i>{" "}
+        <i className="fa-solid fa-right-left text-light "></i>{" "}
       </Button>
       <Modal
         backdrop={false}

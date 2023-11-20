@@ -21,10 +21,23 @@ namespace Persistence
         public DbSet<AssignmentUser> AssignmentUsers { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Priority> Priorities { get; set; }
+        public DbSet<AppCredentials> AppCredentials { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Data for AppCredentials
+            modelBuilder.Entity<AppCredentials>().HasData(
+                new AppCredentials
+                {
+                    Id = 1,
+                    AppName = "TeamO",
+                    AppDescription = "A Team Management App",
+                    AppContactMail = "teamo@teamo.com",
+                    AppContactPhone = "000022228888"
+                }
+                );
+
             // Seed data for User
             modelBuilder.Entity<User>().HasData(
                 new User
@@ -108,7 +121,7 @@ namespace Persistence
                     Id = 1,
                     Title = "Database design",
                     Description = "Create an ER diagram and a relational schema for a given scenario",
-                    StartDate= new DateTime(2023, 9, 10),
+                    StartDate = new DateTime(2023, 9, 10),
                     DueDate = new DateTime(2023, 9, 20),
                     Priority = 4,
                     Status = 2,

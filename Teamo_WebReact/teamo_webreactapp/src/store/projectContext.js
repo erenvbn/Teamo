@@ -2,47 +2,77 @@ import React, { createContext, useEffect, useState } from "react";
 import apiConfig from "../config/apiconfig";
 import apiService from "../services/apiService";
 
-// Creating Project Context with an initial project data
+// Define a context with default values
 export const ProjectContext = createContext({
   selectedProjectId: null,
   selectedProjectData: {},
   setSelectedProjectId: (id) => {},
+  refreshAssignmentUsersFlag:false,
+  setRefreshAssignmentUsersFlag: () => {},
 });
 
-// ProjectContextProvider function component
-//to provide context and props to the entire app
+// Component to provide the project context to the app
 export const ProjectContextProvider = ({ children }) => {
+  // Initial value for selected project ID
   const initialValue = 1;
-  const [selectedProjectId, setSelectedProjectId] = useState(initialValue);
-  const [selectedProjectData, setSelectedProjectData] = useState({});
+
+  // State variables for project-related data
+  const [selectedProjectIdState, setSelectedProjectIdSetter] =
+    useState(initialValue);
+  const [selectedProjectDataState, setSelectedProjectDataSetter] = useState({});
+  const [refreshAssignmentUsersFlagState, setRefreshAssignmentUsersFlagSetter] =
+    useState(false);
+
+  // Log the value of refreshAssignmentUsersFlag whenever it changes
+  // useEffect(() => {
+  //   console.log(
+  //     "refreshAssignmentUsersFlag changed:",
+  //     refreshAssignmentUsersFlagState
+  //   );
+  // }, [refreshAssignmentUsersFlagState]);
 
   // Fetch project data based on the selectedProjectId
   useEffect(() => {
-    if (selectedProjectId !== null) {
+    if (selectedProjectIdState !== null) {
       apiService
-        .get(apiConfig.getProjects + `/${selectedProjectId}`)
+        .get(apiConfig.getProjects + `/${selectedProjectIdState}`)
         .then((res) => {
-          setSelectedProjectData(res.data);
+          setSelectedProjectDataSetter(res.data);
         })
         .catch((error) => {
           console.error("Error fetching project data: ", error);
         });
     }
-  }, [selectedProjectId]);
+  }, [selectedProjectIdState, refreshAssignmentUsersFlagState]);
 
-  // Create a function to update the selected project ID
+  // Function to update the selected project ID
   const handleSelectedProjectId = (id) => {
-    setSelectedProjectId(id);
+    setSelectedProjectIdSetter(id);
+    // Additional logic if needed
+  };
+
+  // Function to toggle the refreshAssignmentUsersFlag
+  const handleAssignmentUserRefresh = () => {
+    setRefreshAssignmentUsersFlagSetter(!refreshAssignmentUsersFlagState);
   };
 
   return (
-    //INITIAL VALUES HERE IMPORTANT
+    // Provide actual values and functions through the context
+    //as a key value pairs
     <ProjectContext.Provider
       value={{
-        //using state value of selectedProjectId
-        selectedProjectId,
-        selectedProjectData,
+        // selectedProjectId: This property holds the current selected project ID.
+        selectedProjectId: selectedProjectIdState,
+
+        selectedProjectData: selectedProjectDataState,
         setSelectedProjectId: handleSelectedProjectId,
+
+        //Bu değişimden yararlanmasını istediği componente koy (useeffect)
+        refreshAssignmentUsersFlag: refreshAssignmentUsersFlagState,
+
+        //Aşağıdakini bu fonksiyon aracılığıyla state'i update etmek 
+        //isteyen componente koy
+        setRefreshAssignmentUsersFlag: handleAssignmentUserRefresh,
       }}
     >
       {children}

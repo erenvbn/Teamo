@@ -25,6 +25,7 @@ const apiConfig = {
   getProjectComments: `${apiBaseUrl}Comment/projectcomment`,
   getProjectUser: `${apiBaseUrl}AssignmentUser/projectUser`,
   getAssignmentUser:`${apiBaseUrl}AssignmentUser/assignmentUser`,
+  getAssignmentComments:`${apiBaseUrl}Comment/assignmentcomment`,
 
   //POST METHODS
   postProject: `${apiBaseUrl}Project`,
