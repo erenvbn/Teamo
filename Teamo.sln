@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teamo_API", "Teamo_API\Team
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teamo_DataAccess", "Persistence\Teamo_DataAccess.csproj", "{903C26BD-D415-4CC7-89E0-4D56E4747B34}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Teamo_WebApp", "Teamo_Web\Teamo_WebApp.esproj", "{49FF7735-9D8F-4656-8134-0D929CF3B6B2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +21,6 @@ Global
 		{903C26BD-D415-4CC7-89E0-4D56E4747B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{903C26BD-D415-4CC7-89E0-4D56E4747B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{903C26BD-D415-4CC7-89E0-4D56E4747B34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49FF7735-9D8F-4656-8134-0D929CF3B6B2}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
