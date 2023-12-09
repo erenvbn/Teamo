@@ -2,10 +2,11 @@
 using Persistence;
 using Persistence.Models;
 using Teamo_API.Models.DTO;
+using Teamo_DataAccess.Models;
 
 namespace Teamo_API
 {
-    public class MappingConfig:Profile
+    public class MappingConfig : Profile
     {
         public MappingConfig()
         {
@@ -19,6 +20,14 @@ namespace Teamo_API
             CreateMap<CommentDTO, Comment>().ReverseMap();
 
             CreateMap<AssignmentUserDTO, AssignmentUser>().ReverseMap();
+
+            CreateMap<LoginRequestDTO, LoginRequest>().ReverseMap();
+
+            CreateMap<LoginResponseDTO, LoginResponse>().ReverseMap();
+
+            CreateMap<RegistrationRequestDTO, RegistrationRequest>().ReverseMap();
+
+
         }
     }
 }

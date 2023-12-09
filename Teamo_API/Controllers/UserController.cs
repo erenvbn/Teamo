@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Persistence;
 using Persistence.Repository.IRepository;
 using System.ComponentModel.DataAnnotations.Schema;
 using Teamo_API.Models.DTO;
+using Teamo_DataAccess.Models;
 
 namespace Teamo_API.Controllers
 {
@@ -28,7 +30,46 @@ namespace Teamo_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name ="GetUsers")]
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+        {
+
+            var loginRequest = _mapper.Map<LoginRequest>(loginRequestDTO);
+            var loginResponseDTO = _mapper.Map<LoginResponseDTO>(await _dbUser.Login(loginRequest));
+            if (loginResponseDTO == null || string.IsNullOrEmpty(loginResponseDTO.Token))
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            else
+            {
+                return Ok(loginResponseDTO);
+            }
+
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDTO registrationRequestDTO)
+        {
+            var registrationRequest = _mapper.Map<RegistrationRequest>(registrationRequestDTO);
+            bool isUserNameUnique = _dbUser.IsUniqueUser(registrationRequestDTO.UserName);
+            if (!isUserNameUnique)
+            {
+                return BadRequest(new { message = "Username is already taken." });
+            }
+            else
+            {
+
+                var users = await _dbUser.GetAllAsync();
+                registrationRequest.Id = users.OrderByDescending(u => u.Id).First().Id + 1;
+                var user = await _dbUser.Register(registrationRequest);
+                var userDTO = _mapper.Map<UserDTO>(user);
+                return Ok(userDTO);
+            }
+
+        }
+
+        [HttpGet(Name = "GetUsers")]
         public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
             IEnumerable<User> userList = await _dbUser.GetAllAsync();
@@ -44,7 +85,7 @@ namespace Teamo_API.Controllers
             }
             else
             {
-                return await _dbUser.GetAsync(u=> u.Id == id);
+                return await _dbUser.GetAsync(u => u.Id == id);
             }
         }
 
@@ -91,7 +132,7 @@ namespace Teamo_API.Controllers
                 {
                     return BadRequest();
                 }
-                else if (_dbUser.GetAsync(u=> u.Id == id) == null)
+                else if (_dbUser.GetAsync(u => u.Id == id) == null)
                 {
                     return NotFound();
                 }
@@ -112,7 +153,7 @@ namespace Teamo_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id:int}", Name ="UpdateUser")]
+        [HttpPut("{id:int}", Name = "UpdateUser")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
         {
             try

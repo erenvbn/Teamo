@@ -28,8 +28,8 @@ const CalendarTimeline = () => {
             (assignment) => assignment.projectId === selectedProjectId
           );
           setAssignments(filteredAssignments);
-          console.log("filteredAssignments");
-          console.log(filteredAssignments);
+          // console.log("filteredAssignments");
+          // console.log(filteredAssignments);
         })
         .catch((error) => {
           console.error("Error fetching assignment data: ", error);
@@ -71,7 +71,7 @@ const CalendarTimeline = () => {
 
   }, [assignments]);
 
-  console.log(items);
+  // console.log(items);
   const timelineStyle = {
     timeline: { background: "#f7f7f7", border: "1px solid #ddd" },
     groupWrapper: { background: "#fff", border: "1px solid #ddd" },

@@ -22,7 +22,7 @@ function PieChartAnimated() {
     setStatusInProcessCounter(initialValue);
     setStatusCompletedCounter(initialValue);
     setStatusCanceledCounter(initialValue);
-    console.log("Seçili Proje Numarası: " + selectedProjectId);
+    // console.log("Seçili Proje Numarası: " + selectedProjectId);
 
     apiService
       .get(apiConfig.getProjectAssignments + `/${selectedProjectId}`)
@@ -82,7 +82,7 @@ function PieChartAnimated() {
         },
         legend: {
           display: true,
-          responsive: true,
+          responsive: false,
           position: "right",
           labels: {
             boxWidth: 12,
@@ -98,7 +98,7 @@ function PieChartAnimated() {
   };
 
   return (
-    <div>
+    <div style={{ width: "18rem", height: "18rem" }}>
       <Doughnut data={data} options={data.options} />
     </div>
   );

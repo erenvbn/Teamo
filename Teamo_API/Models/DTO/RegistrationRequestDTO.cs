@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Teamo_API.Models.DTO
+﻿namespace Teamo_API.Models.DTO
 {
-    public class UserDTO
+    public class RegistrationRequestDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public int UserRole { get; set; }
     }
 }

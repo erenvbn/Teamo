@@ -24,7 +24,7 @@ const Assignment = ({
 
   useEffect(() => {
     // console.log("refreshAssignmentUsersFlag in Assignment Component true-false");
-    console.log(refreshAssignmentUsersFlag);
+    // console.log(refreshAssignmentUsersFlag);
   }, [refreshAssignmentUsersFlag]);
 
   //Fetching data for progressbar

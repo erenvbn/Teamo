@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.Models;
+using Teamo_DataAccess.Models;
 
 namespace Persistence
 {
@@ -14,6 +15,7 @@ namespace Persistence
                 options.UseSqlite("A FALLBACK CONNECTION STRING");
             }
         }
+        public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
@@ -26,6 +28,19 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<UserRoles>().HasData(
+                new UserRoles
+                {
+                    Id = 1,
+                    UserRoleTitle = "Admin",
+                },
+                new UserRoles
+                {
+                    Id = 2,
+                    UserRoleTitle = "User",
+                }
+                );
             //Data for AppCredentials
             modelBuilder.Entity<AppCredentials>().HasData(
                 new AppCredentials
@@ -43,33 +58,42 @@ namespace Persistence
                 new User
                 {
                     Id = 1,
-                    Name = "Eren",
+                    Name = "Eren Guney",
+                    UserName = "erguney",
                     Email = "erenvbn@gmail.com",
-                    Password = "ereneren"
+                    Password = "ereneren",
+                    UserRole = 1,
                 },
 
                 new User
                 {
                     Id = 2,
-                    Name = "Emre",
+                    Name = "Emre Guney",
+                    UserName = "emguney",
                     Email = "emrevbn@gmail.com",
-                    Password = "emreemre"
+                    Password = "emreemre",
+                    UserRole = 2,
                 },
 
                 new User
                 {
                     Id = 3,
-                    Name = "Bengü",
-                    Email = "bengüvbn@gmail.com",
-                    Password = "bengübengü"
+                    Name = "Bengu Atici",
+                    UserName = "batici",
+                    Email = "benguvbn@gmail.com",
+                    Password = "bengübengü",
+                    UserRole = 2,
+
                 },
 
                 new User
                 {
                     Id = 4,
-                    Name = "Mehmet",
+                    Name = "Mehmet Ozguvenen",
+                    UserName = "mehmeto",
                     Email = "mehmetvbn@gmail.com",
-                    Password = "mehmetmehmet"
+                    Password = "mehmetmehmet",
+                    UserRole = 2,
                 }
 
             );

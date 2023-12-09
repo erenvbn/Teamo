@@ -1,13 +1,16 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.Repository;
 using Persistence.Repository.IRepository;
+using System.Text;
 using Teamo_API;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
@@ -18,14 +21,65 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    // other configurations
-//    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-//});
+
+//AUTHENTICATION
+var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
+
+//Managing Authentication Services
+builder.Services.AddAuthentication(x =>
+{
+    //Creating "Bearer" Layout Scheme
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
+
+builder.Services.AddEndpointsApiExplorer();
+
+//Adding Bearer Token for Swagger Authorization Checker
+//After that Authorize button is added to swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n" +
+                      "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
+
 
 //Cross Origin Policy
 builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigin", builder =>
@@ -54,6 +108,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//Proving that the user is user
+app.UseAuthentication();
+
+//Giving authority for actions
 app.UseAuthorization();
 
 app.MapControllers();

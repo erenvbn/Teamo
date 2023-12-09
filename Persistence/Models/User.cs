@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Teamo_DataAccess.Models;
 
 namespace Persistence
 {
@@ -7,11 +9,12 @@ namespace Persistence
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
 
         // Navigation properties
-        //public List<int> CommentIds { get; set; } // Collection navigation
-        //public List<int> AssignmentIds { get; set; }
+        [ForeignKey("UserRoles")]
+        public int UserRole { get; set; } // Foreign key
     }
 }

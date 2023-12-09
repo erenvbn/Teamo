@@ -33,7 +33,7 @@ function ProjectSummary({}) {
         <div className="d-flex flex-row justify-content-around card-group gap-3 p-2">
           <Row>
             <Col sm="6">
-              <Card body className=" shadow-sm border-light">
+              <CardBody className=" shadow-sm border-light">
                 <CardTitle tag="h5">Status Overview</CardTitle>
                 <CardText>
                   <h5>
@@ -47,7 +47,7 @@ function ProjectSummary({}) {
                   </div>
                 </CardText>
                 <CardBody></CardBody>
-              </Card>
+              </CardBody>
             </Col>
             <Col sm="6">
               <Card body className=" shadow-sm border-light">
